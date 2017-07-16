@@ -17,9 +17,7 @@ class Counter extends Component {
     return (
       <div>
         <div className={styles.backButton} data-tid="backButton">
-          <Link to="/">
-            <i className="fa fa-arrow-left fa-3x" />
-          </Link>
+          <Link to="/">back</Link>
         </div>
         <div className={`counter ${styles.counter}`} data-tid="counter">
           {counter}
