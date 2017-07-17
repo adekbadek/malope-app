@@ -9,6 +9,8 @@ export const hashCode = str => {
   return str.split('').reduce((prevHash, currVal) => ((prevHash << 5) - prevHash) + currVal.charCodeAt(0), 0)
 }
 
+export const EXIF_TAG_NAME = 'UserComment'
+
 const EXIFToolProcess = new exiftool.ExiftoolProcess()
 export const readImageMetadata = imagePath => new Promise((resolve, reject) => {
   const onSuccess = result => {
@@ -29,7 +31,7 @@ const writeImageMetadata = (image, data) => EXIFToolProcess.writeMetadata(image.
 
 export const writeComment = (image, comment) => writeImageMetadata(image, {
   all: '',
-  UserComment: comment,
+  [EXIF_TAG_NAME]: comment,
 }, ['overwrite_original', 'codedcharacterset=utf8'])
 
 export const normalizePath = path => path.replace(/ /g, '\\ ')

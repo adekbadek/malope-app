@@ -1,12 +1,15 @@
 @import "~tachyons/css/tachyons.min.css"
 
+$grey: #575757
+$white: #f7f7f7
+
 body
   position: relative
   min-height: 100vh
   font-family: Helvetica, Helvetica Neue, sans-serif
   overflow-x: hidden
-  background-color: #575757
-  color: #f7f7f7
+  background-color: $grey
+  color: $white
 
 .flex
   display: flex
@@ -15,3 +18,21 @@ body
 
 .center
   text-align: center
+
+.react-tabs
+  &__tab-list
+    padding-left: 0
+    list-style: none
+    display: flex
+  &__tab
+    display: inline-block
+    border: 1px solid
+    flex: 1
+    padding: 10px
+    cursor: pointer
+    text-align: center
+    text-transform: uppercase
+    &--selected
+      color: $grey
+      background-color: $white
+      border-color: $white
