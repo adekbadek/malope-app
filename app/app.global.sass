@@ -12,7 +12,11 @@ body
   color: $white
 
 .flex
-  display: flex
+  &--inline
+    display: inline-flex
+  &--center
+    align-items: center
+    justify-content: center
   &__1
     flex: 1
 
@@ -36,3 +40,13 @@ body
       color: $grey
       background-color: $white
       border-color: $white
+
+.selectable-selectbox
+  z-index: 9000
+  position: absolute
+  cursor: default
+  background: none
+  border: 1px dashed grey
+
+  // odd quickfix
+  transform: translateX(60px) translateY(85px)

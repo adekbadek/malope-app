@@ -1,12 +1,25 @@
-.imageThumb
-  word-break: break-all
-  pre
-    white-space: normal
-  &Tile
-    width: 200px
-    height: 200px
-    background-size: cover
-    background-position: center
+$main: #e02626
 
-.comment
-  width: 100%
+.image
+  &Tile
+    border: 2px solid transparent
+    position: relative
+    &Info
+      &Title
+        font-size: 14px
+    &Display
+      width: 70px
+      height: 70px
+      background-size: cover
+      background-position: center
+    &Selected
+      border-color: $main
+    &Selecting
+      &:after
+        content: ''
+        position: absolute
+        width: 100%
+        height: 100%
+        top: 0
+        left: 0
+        background-color: rgba($main, .2)

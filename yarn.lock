@@ -1161,7 +1161,7 @@ babel-plugin-transform-undefined-to-void@^6.8.2:
   version "6.8.2"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-undefined-to-void/-/babel-plugin-transform-undefined-to-void-6.8.2.tgz#fe2b1d294eb05e87524eb93724dea6e2c3d66fa1"
 
-babel-polyfill@^6.6.1:
+babel-polyfill@^6.23.0, babel-polyfill@^6.6.1:
   version "6.23.0"
   resolved "https://registry.yarnpkg.com/babel-polyfill/-/babel-polyfill-6.23.0.tgz#8364ca62df8eafb830499f699177466c3b03499d"
   dependencies:
@@ -6844,6 +6844,12 @@ react-router@^4.1.1:
     path-to-regexp "^1.5.3"
     prop-types "^15.5.4"
     warning "^3.0.0"
+
+react-selectable-fast@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-selectable-fast/-/react-selectable-fast-2.0.0.tgz#b92de108195bb9d73fd10f258c2501b3e4dcf9f7"
+  dependencies:
+    babel-polyfill "^6.23.0"
 
 react-tabs@^1.1.0:
   version "1.1.0"

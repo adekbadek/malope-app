@@ -22,7 +22,7 @@ export default class ImageThumb extends React.Component {
         <div className='flex'>
           <div className='dib pa2'>
             <div
-              className={styles.imageThumbTile}
+              className={cx(styles.imageThumbTile, styles.imageThumbTileLarge)}
               style={{backgroundImage: `url(${normalizePath(this.props.image.path)})`}}
             />
           </div>
