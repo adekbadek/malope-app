@@ -37,7 +37,7 @@ export default class ImageThumb extends React.Component {
                   <pre className='mb3'>{customData}</pre>
                   <ObjectBuilder
                     onSubmit={this.submitCustomData}
-                    defaultObject={JSON.parse(customData)}
+                    defaultObject={customData ? JSON.parse(customData) : {}}
                   />
                 </div>
               </TabPanel>
