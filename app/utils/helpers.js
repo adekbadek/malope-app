@@ -1,3 +1,5 @@
+import hasha from 'hasha'
+
 import exiftool from 'node-exiftool'
 import { keys, values, zip } from 'ramda'
 
@@ -5,9 +7,7 @@ export const mapObjectToPairs = obj => {
   return zip(keys(obj), values(obj)).map(v => ({key: v[0], val: v[1]}))
 }
 
-export const hashCode = str => {
-  return str.split('').reduce((prevHash, currVal) => ((prevHash << 5) - prevHash) + currVal.charCodeAt(0), 0)
-}
+export const hashString = str => hasha(str, {algorithm: 'md5'})
 
 export const EXIF_TAG_NAME = 'UserComment'
 
