@@ -7584,6 +7584,10 @@ sockjs@0.3.18:
     faye-websocket "^0.10.0"
     uuid "^2.0.2"
 
+some-sass-mixins@^1.11.0:
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/some-sass-mixins/-/some-sass-mixins-1.11.0.tgz#dbd950d1269dcb9f6d03e34401aa30cc967b334d"
+
 sort-keys@^1.0.0:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/sort-keys/-/sort-keys-1.1.2.tgz#441b6d4d346798f1b4e49e8920adfba0e543f9ad"
@@ -8071,10 +8075,6 @@ table@^4.0.1:
     lodash "^4.0.0"
     slice-ansi "0.0.4"
     string-width "^2.0.0"
-
-tachyons@^4.7.4:
-  version "4.7.4"
-  resolved "https://registry.yarnpkg.com/tachyons/-/tachyons-4.7.4.tgz#eca4ffa15c1f06a357f088c6d0e687fc5f0408cc"
 
 tapable@^0.2.5, tapable@~0.2.5:
   version "0.2.6"

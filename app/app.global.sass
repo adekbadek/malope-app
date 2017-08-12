@@ -1,24 +1,39 @@
-@import "~tachyons/css/tachyons.min.css"
 @import "~@blueprintjs/core/dist/blueprint.css"
+@import "~some-sass-mixins/mixins"
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro')
 
-$grey: #575757
-$white: #f7f7f7
+@import "./styles/vars"
+
+html,
+body
+  overflow: hidden
 
 body
   position: relative
   min-height: 100vh
-  font-family: Helvetica, Helvetica Neue, sans-serif
-  overflow-x: hidden
-  background-color: $grey
+  font-family: 'Source Sans Pro', Helvetica, Helvetica Neue, sans-serif
+  background-color: $bg-color
+
+// atomic classes
++margins(10, 5)
++paddings(10, 5)
 
 .flex
+  display: flex
   &--inline
     display: inline-flex
+  &--center-h
+    align-items: center
   &--center
     align-items: center
     justify-content: center
+  &--spread
+    justify-content: space-between
   &__1
     flex: 1
+
+.dib
+  display: inline-block
 
 .center
   text-align: center
@@ -37,7 +52,7 @@ body
     text-align: center
     text-transform: uppercase
     &--selected
-      color: $grey
+      color: $bg-color
       background-color: $white
       border-color: $white
 
@@ -49,4 +64,4 @@ body
   border: 1px dashed grey
 
   // odd quickfix
-  transform: translateX(60px) translateY(85px)
+  transform: translateX(20px) translateY(90px)

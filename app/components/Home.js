@@ -46,22 +46,26 @@ export default class Home extends React.Component {
   render () {
     const itemsLen = this.state.selectedItems.length
     return (
-      <div className={cx('ph3 ph5-ns', styles.Main)}>
+      <div className={cx('plr-20 pt-dark', styles.Main)}>
         <div className={styles.container}>
-          <h2>Image Tagger</h2>
-          <form>
-            <input multiple type='file' onChange={this.submitFile} />
-          </form>
-          <div className='mt3 flex'>
+          <div className='mt-20 flex flex--center-h flex--spread'>
+            <h2 className='mt-10 dib'>Image Tagger</h2>
+            <label className='pt-file-upload mt-10'>
+              <input multiple type='file' onChange={this.submitFile} />
+              <span className='pt-file-upload-input'>Choose files</span>
+            </label>
+          </div>
+          <div className='mt-40 flex'>
             <div className='flex__1'>
               <SelectableImagesList
                 images={this.state.images}
+                areAnySelected={this.state.selectedItems.length > 0}
                 onSelectionFinish={this.handleSelectionFinish}
               />
             </div>
             <div className='flex__1'>
               <div>{itemsLen > 0 && `Editing ${itemsLen} item${itemsLen === 1 ? '' : 's'}`}</div>
-              editing data here
+              editing data for {this.state.selectedItems.map(path(['props', 'image', 'id'])).join(', ')} here
             </div>
           </div>
         </div>

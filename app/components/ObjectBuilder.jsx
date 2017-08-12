@@ -25,7 +25,7 @@ export default class ObjectBuilder extends React.Component {
             pair={v}
           />
         ))}
-        <div className='mt2'>
+        <div className='mt-10'>
           <div>
             <input type='text' ref='newKeyInput' />
             <Button
@@ -37,7 +37,7 @@ export default class ObjectBuilder extends React.Component {
               }}
             >add</Button>
           </div>
-          <div className='mt2'>
+          <div className='mt-10'>
             <Button
               onClick={() => this.props.onSubmit(this.state.object)}
             >save</Button>

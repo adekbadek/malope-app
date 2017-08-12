@@ -4,11 +4,10 @@ import React from 'react'
 import Button from './Button'
 
 const PairElement = props =>
-  <div className='w-50 dib'>
+  <div className='dib'>
     {props.editHandler ? (
       <input
         type='text'
-        className='w-90'
         defaultValue={props.text}
         onChange={(e) => {
           props.editHandler && props.editHandler(e.target.value)
@@ -19,7 +18,7 @@ const PairElement = props =>
 
 export default (props: {editHandler?: any, deleteHandler?: any, pair: {key: string, val: (string | number)}}) => {
   return (
-    <div className='flex mt1' >
+    <div className='flex mt-10' >
       <PairElement text={props.pair.key} />
       <PairElement editHandler={
         props.editHandler && ((value) => props.editHandler && props.editHandler(props.pair.key, value))

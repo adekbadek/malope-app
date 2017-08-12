@@ -185,8 +185,8 @@
     "react-tabs": "^1.1.0",
     "redux": "^3.7.1",
     "redux-thunk": "^2.2.0",
-    "source-map-support": "^0.4.15",
-    "tachyons": "^4.7.4"
+    "some-sass-mixins": "^1.11.0",
+    "source-map-support": "^0.4.15"
   },
   "devEngines": {
     "node": ">=7.x",

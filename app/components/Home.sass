@@ -1,14 +1,14 @@
-$main: #e02626
-$grey: #575757
-$white: #f7f7f7
+@import "../styles/vars"
 
 .Main
   color: $white
 
 .image
   &Tile
-    border: 2px solid transparent
     position: relative
+    border: 2px solid transparent
+    border-radius: 5px
+    padding: 5px
     &Info
       &Title
         font-size: 14px
@@ -17,9 +17,13 @@ $white: #f7f7f7
       height: 70px
       background-size: cover
       background-position: center
+      border-radius: 2px
+      overflow: hidden
     &Selected
       border-color: $main
+      background-color: rgba($main, .1)
     &Selecting
+      opacity: .8
       &:after
         content: ''
         position: absolute
@@ -28,3 +32,8 @@ $white: #f7f7f7
         top: 0
         left: 0
         background-color: rgba($main, .2)
+        border-radius: inherit
+
+  &Container
+    max-height: 80vh
+    overflow: scroll

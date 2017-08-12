@@ -8,7 +8,7 @@ import styles from './Home.sass'
 const SelectableImage = ({ selectableRef, selected, selecting, ...props }) =>
   <div
     ref={selectableRef}
-    className={cx('mr2 mv2 dib flex--inline', styles.imageTile, {
+    className={cx('mr-5 mb-5 flex--inline', styles.imageTile, {
       [styles.imageTileSelected]: selected,
       [styles.imageTileSelecting]: selecting,
     })}
@@ -17,7 +17,7 @@ const SelectableImage = ({ selectableRef, selected, selecting, ...props }) =>
       className={styles.imageTileDisplay}
       style={{backgroundImage: `url(${normalizePath(props.image.path)})`}}
     />
-    <div className='pa1'>
+    <div className='p-5'>
       <span className={styles.imageTileInfoTitle}>
         {props.image.name}
       </span>
