@@ -1,4 +1,5 @@
 import hasha from 'hasha'
+import safeParse from 'safe-json-parse/callback'
 
 import exiftool from 'node-exiftool'
 import { keys, values, zip } from 'ramda'
@@ -34,3 +35,9 @@ export const writeComment = (image, comment) => writeImageMetadata(image, {
 }, ['overwrite_original', 'codedcharacterset=utf8'])
 
 export const normalizePath = path => path.replace(/ /g, '\\ ')
+
+export const jsonParse = (str: string) => new Promise((resolve, reject) => {
+  safeParse(str, (_, json) => {
+    return json && resolve(json)
+  })
+})
