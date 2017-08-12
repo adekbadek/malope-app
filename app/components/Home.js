@@ -1,13 +1,15 @@
 // @flow
-import React, { Component } from 'react'
+import React from 'react'
+import cx from 'classnames'
 import { pick, path, merge } from 'ramda'
 
 import { hashString, readImageMetadata } from '../utils/helpers'
 import { saveFileList, retrieveFileList } from '../utils/storage'
 import styles from './Home.sass'
 import SelectableImagesList from './SelectableImagesList'
+import { showWarning, showInfo } from './MainToaster'
 
-export default class Home extends Component {
+export default class Home extends React.Component {
   state = {
     images: [],
     selectedItems: [],
@@ -32,8 +34,11 @@ export default class Home extends Component {
       .then(metadata => {
         this.setState({images: images.map((image, i) => (
           merge(image, {metadata: metadata[i], id: hashString(image.path)})
-        ))})
+        ))}, () => {
+          showInfo(`Imported ${images.length} files`)
+        })
       })
+      .catch(showWarning)
   }
   handleSelectionFinish = (selectedItems: any) => {
     this.setState({selectedItems})
@@ -41,7 +46,7 @@ export default class Home extends Component {
   render () {
     const itemsLen = this.state.selectedItems.length
     return (
-      <div className='ph3 ph5-ns'>
+      <div className={cx('ph3 ph5-ns', styles.Main)}>
         <div className={styles.container}>
           <h2>Image Tagger</h2>
           <form>
