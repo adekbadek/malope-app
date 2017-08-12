@@ -167,6 +167,7 @@
     "classnames": "^2.2.5",
     "devtron": "^1.4.0",
     "electron-debug": "^1.2.0",
+    "electron-json-storage": "^3.0.7",
     "hasha": "^3.0.0",
     "history": "^4.6.3",
     "node-exiftool": "^2.2.0",

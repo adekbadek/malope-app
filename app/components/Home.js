@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { pick, path, merge } from 'ramda'
 
 import { hashString, readImageMetadata } from '../utils/helpers'
+import { saveFileList, retrieveFileList } from '../utils/storage'
 import styles from './Home.sass'
 import SelectableImagesList from './SelectableImagesList'
 
@@ -11,10 +12,18 @@ export default class Home extends Component {
     images: [],
     selectedItems: [],
   }
+  componentDidMount () {
+    retrieveFileList().then(res => {
+      res && res.images && this.updateImages(res.images)
+    })
+  }
   submitFile = (e: SyntheticEvent) => {
     const fileList = e.currentTarget.files
-    const images = [].slice.call(fileList).map(file => pick(['path', 'name'], file))
-    this.updateImages(images)
+    if (fileList.length > 0) {
+      const images = [].slice.call(fileList).map(file => pick(['path', 'name'], file))
+      saveFileList({images})
+      this.updateImages(images)
+    }
   }
   updateImages = (images: any = this.state.images) => {
     Promise.all(

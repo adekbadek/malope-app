@@ -13,9 +13,8 @@ export const EXIF_TAG_NAME = 'UserComment'
 
 const EXIFToolProcess = new exiftool.ExiftoolProcess()
 export const readImageMetadata = imagePath => new Promise((resolve, reject) => {
-  const onSuccess = result => {
-    resolve(result.data[0])
-  }
+  const onSuccess = result => result.data ? resolve(result.data[0]) : reject(new Error(result.error))
+
   if (EXIFToolProcess.isOpen) {
     EXIFToolProcess.readMetadata(imagePath, ['-File:all'])
       .then(onSuccess, reject)
