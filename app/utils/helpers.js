@@ -42,4 +42,4 @@ export const jsonParse = (str: string) => new Promise((resolve, reject) => {
   })
 })
 
-export const sameValues = (arr: array) => arr.every(v => v === arr[0])
+export const sameValues = (arr: Array<any>) => arr.every(v => v === arr[0])

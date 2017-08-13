@@ -17,6 +17,7 @@ export const showWarning = (message: string) => {
 export const showInfo = (message: string) => {
   MainToaster.show({
     message,
+    timeout: 1000,
     className: 'pt-intent-success',
     intent: Intent.SUCCESS,
     iconName: 'tick',

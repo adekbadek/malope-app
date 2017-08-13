@@ -1,7 +1,7 @@
 // @flow
 import React from 'react'
 import cx from 'classnames'
-import { pick, path, merge } from 'ramda'
+import { pluck, union, pick, path, merge } from 'ramda'
 
 import { hashString, readImageMetadata } from '../utils/helpers'
 import { saveFileList, retrieveFileList } from '../utils/storage'
@@ -13,7 +13,7 @@ import { showWarning, showInfo } from './MainToaster'
 export default class Home extends React.Component {
   state = {
     images: [],
-    selectedItems: [],
+    selectedImagesIds: [],
   }
   componentDidMount () {
     retrieveFileList().then(res => {
@@ -28,25 +28,33 @@ export default class Home extends React.Component {
       this.updateImages(images)
     }
   }
-  updateImages = (images: any = this.state.images) => {
+  updateImages = (images: any = this.state.images, update: boolean = false) => {
     Promise.all(
       images.map(image => readImageMetadata(image.path))
     )
       .then(metadata => {
-        this.setState({images: images.map((image, i) => (
+        const updatedImages = images.map((image, i) => (
           merge(image, {metadata: metadata[i], id: hashString(image.path)})
-        ))}, () => {
-          showInfo(`Imported ${images.length} files`)
-        })
+        ))
+        const updatedIds = pluck('id', updatedImages)
+        const withoutUpdated = this.state.images.filter(v => !updatedIds.includes(v.id))
+        this.setState(
+          state => ({images: update ? union(updatedImages, withoutUpdated) : updatedImages}),
+          () => {
+            showInfo(`${update ? 'Updated' : 'Imported'} ${images.length} files`)
+          }
+        )
       })
-      .catch(showWarning)
+      .catch(res => {
+        console.log(res)
+        showWarning(res)
+      })
   }
   handleSelectionFinish = (selectedItems: any) => {
-    this.setState({selectedItems})
+    this.setState({selectedImagesIds: selectedItems.map(path(['props', 'image', 'id']))})
   }
-  getSelectedImages = () => this.state.selectedItems.map(path(['props', 'image']))
   render () {
-    const itemsLen = this.state.selectedItems.length
+    const itemsLen = this.state.selectedImagesIds.length
     return (
       <div className={cx('plr-20 pt-dark', styles.Main)}>
         <div className={cx('pt-5', styles.container)}>
@@ -58,21 +66,23 @@ export default class Home extends React.Component {
             </label>
           </div>
           <div className='mt-40 flex'>
-            <div className='flex__1'>
+            <div className='w--50'>
               <SelectableImagesList
                 images={this.state.images}
-                areAnySelected={this.state.selectedItems.length > 0}
+                areAnySelected={this.state.selectedImagesIds.length > 0}
                 onSelectionFinish={this.handleSelectionFinish}
               />
             </div>
-            <div className='flex__1'>
-              <div>{itemsLen > 0 && `Editing ${itemsLen} item${itemsLen === 1 ? '' : 's'}`}</div>
-              {this.state.images.length > 0 &&
-                <ImageThumb
-                  images={this.getSelectedImages()}
-                  updateCallback={() => this.updateImages()}
-                />
-              }
+            <div className='w--50'>
+              {itemsLen > 0
+                ? <div>
+                  <div>{`Editing ${itemsLen} item${itemsLen === 1 ? '' : 's'}`}</div>
+                  <ImageThumb
+                    images={this.state.images.filter(v => this.state.selectedImagesIds.includes(v.id))}
+                    updateCallback={this.updateImages}
+                  />
+                </div>
+                : <div className='mb-10 pt-callout pt-intent-primary'>Select files in the left panel</div>}
             </div>
           </div>
         </div>
