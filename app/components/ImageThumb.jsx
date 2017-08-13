@@ -1,54 +1,55 @@
 // @flow
 import React from 'react'
-import { omit, prop } from 'ramda'
+import { prop, path } from 'ramda'
 import cx from 'classnames'
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 
 import styles from './Home.sass'
-import { EXIF_TAG_NAME, writeComment, normalizePath, mapObjectToPairs } from '../utils/helpers'
+import { EXIF_TAG_NAME, writeComment, jsonParse, sameValues } from '../utils/helpers'
 import ObjectBuilder from './ObjectBuilder'
-import Pair from './Pair'
 
 export default class ImageThumb extends React.Component {
+  state = {
+    customData: {},
+  }
+  componentWillReceiveProps (nextProps: any) {
+    if (JSON.stringify(this.props.images) !== JSON.stringify(nextProps.images)) {
+      if (nextProps.images.length > 0) {
+        const data = prop(EXIF_TAG_NAME, nextProps.images[0].metadata)
+        if (data) {
+          jsonParse(data).then(customData => this.setState({customData}))
+        } else {
+          this.resetState()
+        }
+      } else {
+        this.resetState()
+      }
+    }
+  }
+  resetState = () => this.setState({customData: {}})
   submitCustomData = (object: {}) => {
-    writeComment(this.props.image, JSON.stringify(object))
+    Promise.all(
+      this.props.images.map(image => writeComment(image, JSON.stringify(object)))
+    )
       .then(this.props.updateCallback)
   }
+  getImagesCustomData = () => (
+    this.props.images.map(path(['metadata', EXIF_TAG_NAME]))
+  )
   render () {
-    const customData = prop(EXIF_TAG_NAME, this.props.image.metadata)
+    const isAllSelectedCustomDataEqual = sameValues(this.getImagesCustomData())
     return (
-      <div className={cx('mt4', styles.imageThumb)}>
-        <div className='center bt bb pv1'>{this.props.image.name}</div>
-        <div className='flex'>
-          <div className='dib pa2'>
-            <div
-              className={cx(styles.imageThumbTile, styles.imageThumbTileLarge)}
-              style={{backgroundImage: `url(${normalizePath(this.props.image.path)})`}}
+      <div className={cx('mt-20', styles.imageThumb)}>
+        <div className='center'>{this.props.images.map(v => v.name).join(', ')}</div>
+        <div>
+          <div className='mt-20'>
+            {isAllSelectedCustomDataEqual
+              ? <pre className='mb-20'>{JSON.stringify(this.state.customData)}</pre>
+              : <div className='pt-callout pt-intent-warning'>Data differs between selected files</div>
+            }
+            <ObjectBuilder
+              onSubmit={this.submitCustomData}
+              defaultObject={this.state.customData}
             />
-          </div>
-          <div className='dib pa2 flex__1'>
-            <Tabs>
-              <TabList>
-                <Tab>Custom Data</Tab>
-                <Tab>All Data</Tab>
-              </TabList>
-              <TabPanel>
-                <div className='mt3'>
-                  <pre className='mb3'>{customData}</pre>
-                  <ObjectBuilder
-                    onSubmit={this.submitCustomData}
-                    defaultObject={customData ? JSON.parse(customData) : {}}
-                  />
-                </div>
-              </TabPanel>
-              <TabPanel>
-                <div className='mt2'>
-                  {mapObjectToPairs(omit([EXIF_TAG_NAME], this.props.image.metadata)).map(v => (
-                    <Pair key={v.key} pair={v} />
-                  ))}
-                </div>
-              </TabPanel>
-            </Tabs>
           </div>
         </div>
       </div>

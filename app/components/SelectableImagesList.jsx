@@ -8,6 +8,8 @@ import Button from './Button'
 
 export default props =>
   <SelectableGroup
+    enableDeselect
+    mixedDeselect
     onSelectionFinish={props.onSelectionFinish}
   >
     <div>

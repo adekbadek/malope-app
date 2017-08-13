@@ -7,6 +7,7 @@ import { hashString, readImageMetadata } from '../utils/helpers'
 import { saveFileList, retrieveFileList } from '../utils/storage'
 import styles from './Home.sass'
 import SelectableImagesList from './SelectableImagesList'
+import ImageThumb from './ImageThumb'
 import { showWarning, showInfo } from './MainToaster'
 
 export default class Home extends React.Component {
@@ -43,11 +44,12 @@ export default class Home extends React.Component {
   handleSelectionFinish = (selectedItems: any) => {
     this.setState({selectedItems})
   }
+  getSelectedImages = () => this.state.selectedItems.map(path(['props', 'image']))
   render () {
     const itemsLen = this.state.selectedItems.length
     return (
       <div className={cx('plr-20 pt-dark', styles.Main)}>
-        <div className={styles.container}>
+        <div className={cx('pt-5', styles.container)}>
           <div className='mt-20 flex flex--center-h flex--spread'>
             <h2 className='mt-10 dib'>Image Tagger</h2>
             <label className='pt-file-upload mt-10'>
@@ -65,7 +67,12 @@ export default class Home extends React.Component {
             </div>
             <div className='flex__1'>
               <div>{itemsLen > 0 && `Editing ${itemsLen} item${itemsLen === 1 ? '' : 's'}`}</div>
-              editing data for {this.state.selectedItems.map(path(['props', 'image', 'id'])).join(', ')} here
+              {this.state.images.length > 0 &&
+                <ImageThumb
+                  images={this.getSelectedImages()}
+                  updateCallback={() => this.updateImages()}
+                />
+              }
             </div>
           </div>
         </div>
