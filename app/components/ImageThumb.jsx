@@ -1,57 +1,63 @@
 // @flow
 import React from 'react'
-import { prop, path, merge } from 'ramda'
+import { merge, assoc, evolve } from 'ramda'
 import cx from 'classnames'
 
 import styles from './Home.sass'
-import { EXIF_TAG_NAME, writeComment, jsonParse, sameValues } from '../utils/helpers'
+import {
+  writeComment,
+  sameValues,
+  getRawCustomData,
+  parseCustomData
+} from '../utils/helpers'
+import Button from './Button'
 import TagsEditor from './TagsEditor'
 
-const TAGS_JOIN = '|'
+const CUSTOM_DATA_TEMPLATE = {
+  tags: [],
+}
+
+const prepareFiles = (files: Array<any>) => {
+  const createData = file => merge(CUSTOM_DATA_TEMPLATE, parseCustomData(file))
+  return files.map(file => assoc('data', createData(file), file))
+}
+
+const updateSingleFile = (changes: any) => (file: any) => {
+  const updatedData = changes && evolve(changes, file.data)
+  return writeComment(file, JSON.stringify(updatedData ? merge(file.data, updatedData) : {}))
+}
 
 export default (props: any) => {
-  const submitCustomData = (object: {}) => {
-    const customData = jsonParse(getRawCustomData())
-    if (customData) {
-      const newCustomData = merge(customData, object)
-      Promise.all(
-        props.images.map(image => writeComment(image, JSON.stringify(newCustomData)))
-      )
-        .then(() => {
-          props.updateCallback(props.images, true)
-        })
-    }
+  const files = prepareFiles(props.images)
+
+  const submitCustomData = (changes?: {}) => {
+    Promise.all(files.map(updateSingleFile(changes)))
+      .then(() => props.updateCallback(props.images, true))
   }
-  const getImagesCustomData = () => (
-    props.images.map(path(['metadata', EXIF_TAG_NAME]))
-  )
-  const getRawCustomData = (index: number = 0) => (
-    prop(EXIF_TAG_NAME, props.images[index].metadata)
-  )
-  const getTags = () => {
-    const customData = jsonParse(getRawCustomData())
-    const tags = customData && customData.tags
-    return tags ? tags.split(TAGS_JOIN) : []
-  }
-  const updateTags = (tagList: Array<any>) => {
-    submitCustomData({tags: tagList.join(TAGS_JOIN)})
-  }
+
+  const getRawCustomDataForFiles = () => props.images.map(getRawCustomData)
+
+  const removeAllData = () => submitCustomData()
 
   return (
     <div className={cx('mt-20', styles.imageThumb)}>
-      <div className='center'>{props.images.map(v => v.name).join(', ')}</div>
+      <div className='center'>{files.map(v => v.name).join(', ')}</div>
       <div>
         <div className='mt-20'>
-          {sameValues(getImagesCustomData())
-            ? <pre className='mb-10'>{getRawCustomData()}</pre>
+          {sameValues(getRawCustomDataForFiles())
+            ? <pre className='mb-10'>{getRawCustomData(props.images[0])}</pre>
             : <div className='mb-10 pt-callout pt-intent-warning'>
-              Data differs between selected files. Showing data for the first one.
+              Data differs between selected files.
             </div>
           }
           <TagsEditor
-            tags={getTags()}
-            editHandler={updateTags}
+            files={files}
+            submitHandler={submitCustomData}
           />
+          <Button
+            className='pt-intent-danger mt-20'
+            onClick={removeAllData}
+          >remove all data</Button>
         </div>
       </div>
     </div>

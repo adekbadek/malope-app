@@ -1,8 +1,6 @@
 import hasha from 'hasha'
-import safeParse from 'safe-json-parse/callback'
-
 import exiftool from 'node-exiftool'
-import { keys, values, zip } from 'ramda'
+import { keys, values, zip, compose, prop, evolve } from 'ramda'
 
 export const mapObjectToPairs = obj => {
   return zip(keys(obj), values(obj)).map(v => ({key: v[0], val: v[1]}))
@@ -44,4 +42,12 @@ export const jsonParse = (str: string) => {
   }
 }
 
+export const TAGS_JOIN = '|'
+
 export const sameValues = (arr: Array<any>) => arr.every(v => v === arr[0])
+
+export const getRawCustomData = (image: any) => (
+  prop(EXIF_TAG_NAME, image.metadata)
+)
+
+export const parseCustomData = compose(jsonParse, getRawCustomData)
