@@ -183,7 +183,6 @@
     "react-router-dom": "^4.1.1",
     "react-router-redux": "^5.0.0-alpha.6",
     "react-selectable-fast": "^2.0.0",
-    "react-tabs": "^1.1.0",
     "redux": "^3.7.1",
     "redux-thunk": "^2.2.0",
     "some-sass-mixins": "^1.11.0",
