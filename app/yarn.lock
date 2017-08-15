@@ -2,3 +2,23 @@
 # yarn lockfile v1
 
 
+makepromise@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/makepromise/-/makepromise-1.0.0.tgz#bc6bb6a3e06fd706df51c2923b6936fabd70aa7f"
+
+node-exiftool@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/node-exiftool/-/node-exiftool-2.2.0.tgz#dc7e0e2b4c6a1fa4a5099b463f54ea2ca65ac19c"
+  dependencies:
+    restream "1.2.0"
+    wrote "0.4.0"
+
+restream@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/restream/-/restream-1.2.0.tgz#fd13b031a54e80cc65d1878c43149f1b3a40efbb"
+
+wrote@0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/wrote/-/wrote-0.4.0.tgz#03a36e7efa70ee9ea3eb34302383cc038c9faa8c"
+  dependencies:
+    makepromise "1.0.0"

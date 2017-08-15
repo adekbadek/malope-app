@@ -1,8 +1,8 @@
 {
   "name": "image-tagger",
-  "productName": "Image Tagger",
+  "productName": "ImageTagger",
   "version": "0.12.0",
-  "description": "Image Tagger",
+  "description": "ImageTagger",
   "scripts": {
     "build": "concurrently \"npm run build-main\" \"npm run build-renderer\"",
     "build-dll": "cross-env NODE_ENV=development node --trace-warnings -r babel-register ./node_modules/webpack/bin/webpack --config webpack.config.renderer.dev.dll.js --colors",
@@ -31,7 +31,7 @@
   },
   "browserslist": "electron 1.6",
   "build": {
-    "productName": "Image Tagger",
+    "productName": "ImageTagger",
     "appId": "com.adamboro.ImageTagger",
     "files": [
       "dist/",
@@ -171,7 +171,6 @@
     "electron-json-storage": "^3.0.7",
     "hasha": "^3.0.0",
     "history": "^4.6.3",
-    "node-exiftool": "^2.2.0",
     "ramda": "^0.24.1",
     "react": "^15.6.1",
     "react-addons-css-transition-group": "^15.6.0",
