@@ -1,6 +1,6 @@
 import hasha from 'hasha'
 import exiftool from 'node-exiftool'
-import { keys, values, zip, compose, prop, evolve } from 'ramda'
+import { uniq, evolve, keys, values, zip, compose, prop, merge, assoc } from 'ramda'
 
 export const mapObjectToPairs = obj => {
   return zip(keys(obj), values(obj)).map(v => ({key: v[0], val: v[1]}))
@@ -44,10 +44,22 @@ export const jsonParse = (str: string) => {
 
 export const TAGS_JOIN = '|'
 
-export const sameValues = (arr: Array<any>) => arr.every(v => v === arr[0])
+export const sameValues = (arr: Array<any>) => arr.every(v => JSON.stringify(v) === JSON.stringify(arr[0]))
 
 export const getRawCustomData = (image: any) => (
   prop(EXIF_TAG_NAME, image.metadata) || JSON.stringify({})
 )
 
 export const parseCustomData = compose(jsonParse, getRawCustomData)
+
+const CUSTOM_DATA_TEMPLATE = {
+  tags: [],
+}
+const CUSTOM_DATA_FIX = {
+  tags: tags => uniq(tags)
+}
+export const prepareFiles = (files: Array<any>) => {
+  const createData = file => merge(CUSTOM_DATA_TEMPLATE, parseCustomData(file))
+  return files.map(file => assoc('data', createData(file), file))
+}
+export const fixCustomData = (data) => evolve(CUSTOM_DATA_FIX, data)

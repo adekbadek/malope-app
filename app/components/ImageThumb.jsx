@@ -1,51 +1,41 @@
 // @flow
 import React from 'react'
-import { merge, assoc, evolve } from 'ramda'
+import { merge, evolve } from 'ramda'
 import cx from 'classnames'
 
 import styles from './Home.sass'
 import {
   writeComment,
   sameValues,
-  getRawCustomData,
-  parseCustomData
+  fixCustomData
 } from '../utils/helpers'
 import Button from './Button'
 import TagsEditor from './TagsEditor'
 
-const CUSTOM_DATA_TEMPLATE = {
-  tags: [],
-}
-
-const prepareFiles = (files: Array<any>) => {
-  const createData = file => merge(CUSTOM_DATA_TEMPLATE, parseCustomData(file))
-  return files.map(file => assoc('data', createData(file), file))
-}
-
 const updateSingleFile = (changes: any) => (file: any) => {
-  const updatedData = changes && evolve(changes, file.data)
+  const updatedData = changes && fixCustomData(evolve(changes, file.data))
   return writeComment(file, JSON.stringify(updatedData ? merge(file.data, updatedData) : {}))
 }
 
-export default (props: any) => {
-  const files = prepareFiles(props.images)
-
+export default ({files, updateCallback, allTags, itemsLen}: any) => {
   const submitCustomData = (changes?: {}) => {
     Promise.all(files.map(updateSingleFile(changes)))
-      .then(() => props.updateCallback(props.images, true))
+      .then(() => updateCallback(files, true))
   }
 
-  const getRawCustomDataForFiles = () => props.images.map(getRawCustomData)
+  const getRawCustomDataForFiles = () => files.map(v => v.data)
 
   const removeAllData = () => submitCustomData()
 
   return (
     <div className={cx('mt-20', styles.imageThumb)}>
-      <div className='center'>{files.map(v => v.name).join(', ')}</div>
+      <div>{
+        `Editing ${itemsLen} item${itemsLen === 1 ? '' : 's'}: ${files.map(v => v.name).join(', ')}`
+      }</div>
       <div>
         <div className='mt-20'>
           {sameValues(getRawCustomDataForFiles())
-            ? <pre className='mb-10'>{getRawCustomData(props.images[0])}</pre>
+            ? <pre className='mb-10'>{JSON.stringify(files[0].data)}</pre>
             : <div className='mb-10 pt-callout pt-intent-warning'>
               Data differs between selected files.
             </div>
@@ -53,6 +43,7 @@ export default (props: any) => {
           <TagsEditor
             files={files}
             submitHandler={submitCustomData}
+            allTags={allTags}
           />
           <Button
             className='pt-intent-danger mt-20'

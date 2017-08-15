@@ -3,7 +3,7 @@ import React from 'react'
 import cx from 'classnames'
 import { pluck, union, pick, path, merge } from 'ramda'
 
-import { hashString, readImageMetadata } from '../utils/helpers'
+import { hashString, prepareFiles, readImageMetadata } from '../utils/helpers'
 import { saveFileList, retrieveFileList } from '../utils/storage'
 import styles from './Home.sass'
 import SelectableImagesList from './SelectableImagesList'
@@ -20,7 +20,7 @@ export default class Home extends React.Component {
       res && res.images && this.updateImages(res.images)
     })
   }
-  submitFile = (e: SyntheticEvent) => {
+  submitFile = (e: any) => {
     const fileList = e.currentTarget.files
     if (fileList.length > 0) {
       const images = [].slice.call(fileList).map(file => pick(['path', 'name'], file))
@@ -29,6 +29,9 @@ export default class Home extends React.Component {
     }
   }
   updateImages = (images: any = this.state.images, update: boolean = false) => {
+    if (!update) {
+      this.setState({selectedImagesIds: []})
+    }
     Promise.all(
       images.map(image => readImageMetadata(image.path))
     )
@@ -38,8 +41,10 @@ export default class Home extends React.Component {
         ))
         const updatedIds = pluck('id', updatedImages)
         const withoutUpdated = this.state.images.filter(v => !updatedIds.includes(v.id))
+
+        const newImages = prepareFiles(update ? union(updatedImages, withoutUpdated) : updatedImages)
         this.setState(
-          state => ({images: update ? union(updatedImages, withoutUpdated) : updatedImages}),
+          state => ({images: newImages}),
           () => {
             showInfo(`${update ? 'Updated' : 'Imported'} ${images.length} files`)
           }
@@ -53,6 +58,10 @@ export default class Home extends React.Component {
   handleSelectionFinish = (selectedItems: any) => {
     this.setState({selectedImagesIds: selectedItems.map(path(['props', 'image', 'id']))})
   }
+  getAllTags = () => this.state.images.reduce((arr, image) => union(image.data.tags, arr), [])
+  getImagesForEditing = () => (
+    this.state.images.filter(v => this.state.selectedImagesIds.includes(v.id))
+  )
   render () {
     const itemsLen = this.state.selectedImagesIds.length
     return (
@@ -75,13 +84,12 @@ export default class Home extends React.Component {
             </div>
             <div className='w--50'>
               {itemsLen > 0
-                ? <div>
-                  <div>{`Editing ${itemsLen} item${itemsLen === 1 ? '' : 's'}`}</div>
-                  <ImageThumb
-                    images={this.state.images.filter(v => this.state.selectedImagesIds.includes(v.id))}
-                    updateCallback={this.updateImages}
-                  />
-                </div>
+                ? <ImageThumb
+                  itemsLen={itemsLen}
+                  files={this.getImagesForEditing()}
+                  allTags={this.getAllTags()}
+                  updateCallback={this.updateImages}
+                />
                 : <div className='mb-10 pt-callout pt-intent-primary'>Select files in the left panel</div>}
             </div>
           </div>
