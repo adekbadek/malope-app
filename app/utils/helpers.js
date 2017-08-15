@@ -10,7 +10,9 @@ export const hashString = str => hasha(str, {algorithm: 'md5'})
 
 export const EXIF_TAG_NAME = 'UserComment'
 
-const EXIFToolProcess = new exiftool.ExiftoolProcess()
+// NOTE: exiftool must be installed globally for prod to work. dist-exiftool is not working.
+const EXIFToolProcess = new exiftool.ExiftoolProcess('/usr/local/bin/exiftool')
+
 export const readImageMetadata = imagePath => new Promise((resolve, reject) => {
   const onSuccess = result => result.data ? resolve(result.data[0]) : reject(result.error)
 
