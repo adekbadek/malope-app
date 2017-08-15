@@ -36,10 +36,12 @@ export const writeComment = (image, comment) => writeImageMetadata(image, {
 
 export const normalizePath = path => path.replace(/ /g, '\\ ')
 
-export const jsonParse = (str: string) => new Promise((resolve, reject) => {
-  safeParse(str, (_, json) => {
-    return json && resolve(json)
-  })
-})
+export const jsonParse = (str: string) => {
+  try {
+    return JSON.parse(str)
+  } catch (e) {
+    return null
+  }
+}
 
 export const sameValues = (arr: Array<any>) => arr.every(v => v === arr[0])

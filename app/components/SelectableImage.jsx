@@ -19,10 +19,9 @@ class SelectableImage extends React.Component {
     }
   }
   updateCustomData = (props: any) => {
-    const customData = props.image.metadata[EXIF_TAG_NAME]
-    customData && jsonParse(customData).then(obj => {
-      this.setState({hasCustomData: !isEmpty(obj)})
-    })
+    const rawCustomData = props.image.metadata[EXIF_TAG_NAME]
+    const customData = rawCustomData && jsonParse(rawCustomData)
+    customData && this.setState({hasCustomData: !isEmpty(customData)})
   }
   render () {
     const { selectableRef, selected, selecting, image } = this.props
