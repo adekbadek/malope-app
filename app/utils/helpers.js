@@ -47,7 +47,7 @@ export const TAGS_JOIN = '|'
 export const sameValues = (arr: Array<any>) => arr.every(v => v === arr[0])
 
 export const getRawCustomData = (image: any) => (
-  prop(EXIF_TAG_NAME, image.metadata)
+  prop(EXIF_TAG_NAME, image.metadata) || JSON.stringify({})
 )
 
 export const parseCustomData = compose(jsonParse, getRawCustomData)
