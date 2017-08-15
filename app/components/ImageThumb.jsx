@@ -43,7 +43,7 @@ export default ({files, updateCallback, allTags, itemsLen}: any) => {
       }</div>
       <div>
         <div className='mt-20'>
-          <Tabs2 className='custom-tabs-panel'>
+          <Tabs2 className='custom-tabs-panel' animate={false}>
             <Tab2 id='custom' title='Custom Data' panel={getPanel(getRawCustomDataForFiles())} />
             <Tab2 id='all' title='All Metadata' panel={getPanel(getRawDataForFiles())} />
           </Tabs2>

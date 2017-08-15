@@ -10,6 +10,7 @@
     "node": true
   },
   "rules": {
+    "no-debugger": "off",
     "arrow-parens": ["off"],
     "compat/compat": "error",
     "consistent-return": "off",
