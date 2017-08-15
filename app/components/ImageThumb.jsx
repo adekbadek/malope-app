@@ -2,8 +2,8 @@
 import React from 'react'
 import { merge, evolve } from 'ramda'
 import cx from 'classnames'
+import { Tab2, Tabs2 } from '@blueprintjs/core'
 
-import styles from './Home.sass'
 import {
   writeComment,
   sameValues,
@@ -24,22 +24,29 @@ export default ({files, updateCallback, allTags, itemsLen}: any) => {
   }
 
   const getRawCustomDataForFiles = () => files.map(v => v.data)
+  const getRawDataForFiles = () => files.map(v => v.metadata)
 
   const removeAllData = () => submitCustomData()
 
+  const getPanel = (data) => (
+    sameValues(data)
+      ? <pre className='mb-10'>{JSON.stringify(data[0])}</pre>
+      : <div className='mtb-10 pt-callout pt-intent-warning'>
+          Data differs between selected files.
+      </div>
+  )
+
   return (
-    <div className={cx('mt-20', styles.imageThumb)}>
+    <div className='mt-20'>
       <div>{
         `Editing ${itemsLen} item${itemsLen === 1 ? '' : 's'}: ${files.map(v => v.name).join(', ')}`
       }</div>
       <div>
         <div className='mt-20'>
-          {sameValues(getRawCustomDataForFiles())
-            ? <pre className='mb-10'>{JSON.stringify(files[0].data)}</pre>
-            : <div className='mb-10 pt-callout pt-intent-warning'>
-              Data differs between selected files.
-            </div>
-          }
+          <Tabs2 className='custom-tabs-panel'>
+            <Tab2 id='custom' title='Custom Data' panel={getPanel(getRawCustomDataForFiles())} />
+            <Tab2 id='all' title='All Metadata' panel={getPanel(getRawDataForFiles())} />
+          </Tabs2>
           <TagsEditor
             files={files}
             submitHandler={submitCustomData}

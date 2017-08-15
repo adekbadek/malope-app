@@ -14,6 +14,10 @@ body
   font-family: 'Source Sans Pro', Helvetica, Helvetica Neue, sans-serif
   background-color: $bg-color
 
+pre
+  white-space: pre-wrap
+  word-wrap: break-word
+
 // atomic classes
 +margins(10, 5)
 +paddings(10, 5)
@@ -52,3 +56,14 @@ body
 
   // odd quickfix
   transform: translateX(20px) translateY(90px)
+
+.custom-tabs-panel
+  .pt-tab
+    line-height: normal
+    &-panel
+      margin-top: 0
+    &-indicator
+      display: none
+    &[aria-selected="true"],
+    &:not([aria-disabled="true"]):hover
+      color: $main
