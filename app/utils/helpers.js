@@ -65,3 +65,5 @@ export const prepareFiles = (files: Array<any>) => {
   return files.map(file => assoc('data', createData(file), file))
 }
 export const fixCustomData = (data) => evolve(CUSTOM_DATA_FIX, data)
+
+export const bgImgStyle = path => ({backgroundImage: `url(${normalizePath(path)})`})

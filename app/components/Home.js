@@ -15,6 +15,7 @@ const NoneSelectedPrompt = () =>
     👈 &nbsp;&nbsp;Select files in the left panel.
     <ul>
       <li><code>Shift</code> + <code>click</code> to select multiple</li>
+      <li><code>Alt</code> + <code>click</code> to show preview</li>
     </ul>
   </div>
 

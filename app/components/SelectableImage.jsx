@@ -2,7 +2,7 @@ import React from 'react'
 import cx from 'classnames'
 import { isEmpty } from 'ramda'
 
-import { EXIF_TAG_NAME, normalizePath, jsonParse } from '../utils/helpers'
+import { EXIF_TAG_NAME, bgImgStyle, jsonParse } from '../utils/helpers'
 import styles from './Home.sass'
 
 export default props => {
@@ -13,7 +13,7 @@ export default props => {
 
   return (
     <div
-      className={cx('flex--inline pt-card', styles.imageTile, {
+      className={cx('flex--inline pt-card pt-ui-text pt-icon-eye-open', styles.imageTile, {
         [styles.imageTileSelected]: selected,
         [styles.imageTileSelecting]: selecting,
       })}
@@ -21,7 +21,7 @@ export default props => {
     >
       <div
         className={styles.imageTileDisplay}
-        style={{backgroundImage: `url(${normalizePath(image.path)})`}}
+        style={bgImgStyle(image.path)}
       />
       <div className={styles.imageTileInfo}>
         <div className={styles.imageTileInfoTitle}>

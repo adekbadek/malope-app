@@ -1836,6 +1836,10 @@ circular-json@^0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/circular-json/-/circular-json-0.3.1.tgz#be8b36aefccde8b3ca7aa2d6afc07a37242c0d2d"
 
+clamp@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/clamp/-/clamp-1.0.1.tgz#66a0e64011816e37196828fdc8c8c147312c8634"
+
 clap@^1.0.9:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/clap/-/clap-1.1.3.tgz#b3bd36e93dd4cbfb395a3c26896352445265c05b"
@@ -5991,7 +5995,7 @@ object.entries@^1.0.3, object.entries@^1.0.4:
     function-bind "^1.1.0"
     has "^1.0.1"
 
-object.omit@^2.0.0:
+object.omit@^2.0.0, object.omit@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/object.omit/-/object.omit-2.0.1.tgz#1a9c744829f39dbb858c76ca3579ae2a54ebd1fa"
   dependencies:
@@ -6838,6 +6842,14 @@ react-autocomplete@^1.5.10:
     dom-scroll-into-view "1.0.1"
     prop-types "^15.5.10"
 
+react-cursor-position@^2.2.0:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/react-cursor-position/-/react-cursor-position-2.2.1.tgz#1b0b62620fb4636883fa4cd3a25e8828ce610fd4"
+  dependencies:
+    object-assign "^4.1.1"
+    object.omit "^2.0.1"
+    prop-types "^15.5.10"
+
 react-deep-force-update@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/react-deep-force-update/-/react-deep-force-update-1.0.1.tgz#f911b5be1d2a6fe387507dd6e9a767aa2924b4c7"
@@ -6866,6 +6878,16 @@ react-hot-loader@3.0.0-beta.6:
     redbox-react "^1.2.5"
     source-map "^0.4.4"
 
+react-image-magnify@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/react-image-magnify/-/react-image-magnify-2.0.3.tgz#1f804ccbd04a0d15a689f42f06c7cb7116081431"
+  dependencies:
+    clamp "^1.0.1"
+    object-assign "^4.1.1"
+    prop-types "^15.5.10"
+    react-cursor-position "^2.2.0"
+    react-required-if "^1.0.1"
+
 react-proxy@^1.1.7:
   version "1.1.8"
   resolved "https://registry.yarnpkg.com/react-proxy/-/react-proxy-1.1.8.tgz#9dbfd9d927528c3aa9f444e4558c37830ab8c26a"
@@ -6890,6 +6912,10 @@ react-redux@^5.0.5:
     lodash-es "^4.2.0"
     loose-envify "^1.1.0"
     prop-types "^15.5.10"
+
+react-required-if@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-required-if/-/react-required-if-1.0.1.tgz#f41d06bebb75346c206cd1de8dc0ef5b7c8f9abd"
 
 react-router-dom@^4.1.1:
   version "4.1.1"

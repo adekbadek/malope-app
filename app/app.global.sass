@@ -54,16 +54,6 @@ ul
   &--50
     width: 50%
 
-.selectable-selectbox
-  z-index: 9000
-  position: absolute
-  cursor: default
-  background: none
-  border: 1px dashed grey
-
-  // odd quickfix
-  transform: translateX(20px) translateY(90px)
-
 .custom-tabs-panel
   .pt-tab
     line-height: normal
@@ -73,3 +63,9 @@ ul
     &[aria-selected="true"],
     &:not([aria-disabled="true"]):hover
       color: $main
+
+.pt-dialog
+  width: 90vw
+.dialog-inside
+  max-height: 80vh
+  overflow: scroll
