@@ -2,11 +2,10 @@ import React from 'react'
 import cx from 'classnames'
 import { prop, append, without } from 'ramda'
 import Combokeys from 'combokeys'
-import { Dialog } from '@blueprintjs/core'
+import { Dialog, Button } from '@blueprintjs/core'
 
 import styles from './Home.sass'
 import SelectableImage from './SelectableImage'
-import Button from './Button'
 import ImagePreview from './ImagePreview'
 
 export default class SelectableImagesList extends React.Component {

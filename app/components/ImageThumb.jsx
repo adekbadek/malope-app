@@ -2,13 +2,13 @@
 import React from 'react'
 import { merge, evolve } from 'ramda'
 import { Tab2, Tabs2 } from '@blueprintjs/core'
+import { Button } from '@blueprintjs/core'
 
 import {
   writeComment,
   sameValues,
   fixCustomData
 } from '../utils/helpers'
-import Button from './Button'
 import TagsEditor from './TagsEditor'
 
 const updateSingleFile = (changes: any) => (file: any) => {
