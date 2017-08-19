@@ -7,6 +7,7 @@ import { Tooltip } from '@blueprintjs/core'
 import AutocompleteInput from './AutocompleteInput'
 import tagsEditorStyles from './TagsEditor.sass'
 import homeStyles from './Home.sass'
+import { pluralize } from '../utils/helpers'
 
 const getFileData = (file: any) => ({name: file.name, id: file.id})
 
@@ -46,7 +47,7 @@ class NewTagInput extends React.Component {
           inputStyle={{height: '22px'}}
           inputClassName='mtb-5 mr-5'
           onChange={e => this.setState({value: e.target.value})}
-          placeholder={`add tag to ${this.props.filesLength} file${this.props.filesLength > 1 ? 's' : ''}`}
+          placeholder={`add tag to ${pluralize('file', this.props.filesLength)}`}
         />
       </form>
     )

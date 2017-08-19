@@ -5,7 +5,7 @@ import { Button } from '@blueprintjs/core'
 
 import AutocompleteInput from './AutocompleteInput'
 import homeStyles from './Home.sass'
-import { mapObjectToPairs, FILENAMES_SEPARATOR, groupFieldsData } from '../utils/helpers'
+import { pluralize, mapObjectToPairs, FILENAMES_SEPARATOR, groupFieldsData } from '../utils/helpers'
 
 const INITIAL_STATE = {
   fieldName: '',
@@ -116,7 +116,7 @@ export default class CustomFieldsEditor extends React.Component {
                 className='pt-icon-add'
                 disabled={!this.isValid()}
                 onClick={this.submitNewField}
-              >add</Button>
+              >add to {pluralize('file', this.props.files)}</Button>
             </form>
           </div>
         </div>

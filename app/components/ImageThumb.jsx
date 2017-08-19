@@ -6,7 +6,8 @@ import { Tab2, Tabs2, Button } from '@blueprintjs/core'
 import {
   writeComment,
   sameValues,
-  fixCustomData
+  fixCustomData,
+  pluralize
 } from '../utils/helpers'
 import TagsEditor from './TagsEditor'
 import CustomFieldsEditor from './CustomFieldsEditor'
@@ -39,7 +40,7 @@ export default ({files, updateCallback, itemsLen, ...props}: any) => {
   return (
     <div className='mt-20'>
       <div>{
-        `Editing ${itemsLen} item${itemsLen === 1 ? '' : 's'}: ${files.map(v => v.name).join(', ')}`
+        `Editing ${pluralize('item', itemsLen)}: ${files.map(v => v.name).join(', ')}`
       }</div>
       <div>
         <div className='mt-20'>
@@ -60,7 +61,7 @@ export default ({files, updateCallback, itemsLen, ...props}: any) => {
           <div className='center'>
             <Button
               className='pt-intent-danger mt-30'
-              onClick={removeAllData}
+              onClick={() => window.confirm('Are you sure?') && removeAllData()}
             >remove all data</Button>
           </div>
         </div>

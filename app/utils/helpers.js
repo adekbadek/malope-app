@@ -104,3 +104,8 @@ export const groupFieldsData = (files) => {
       }
     }, [])
 }
+
+export const pluralize = (str, items) => {
+  const len = items.length || items
+  return `${len} ${str}${len > 1 ? 's' : ''}`
+}
