@@ -1,23 +1,23 @@
 import React from 'react'
 import cx from 'classnames'
 import { isEmpty } from 'ramda'
-import { createSelectable } from 'react-selectable-fast'
 
 import { EXIF_TAG_NAME, normalizePath, jsonParse } from '../utils/helpers'
 import styles from './Home.sass'
 
-const SelectableImage = props => {
-  const rawCustomData = props.image.metadata[EXIF_TAG_NAME]
+export default props => {
+  const { selected, selecting, image, ...passedProps } = props
+
+  const rawCustomData = image.metadata[EXIF_TAG_NAME]
   const customData = rawCustomData && jsonParse(rawCustomData)
-  const { selectableRef, selected, selecting, image } = props
 
   return (
     <div
-      ref={selectableRef}
       className={cx('flex--inline pt-card', styles.imageTile, {
         [styles.imageTileSelected]: selected,
         [styles.imageTileSelecting]: selecting,
       })}
+      {...passedProps}
     >
       <div
         className={styles.imageTileDisplay}
@@ -34,5 +34,3 @@ const SelectableImage = props => {
     </div>
   )
 }
-
-export default createSelectable(SelectableImage)

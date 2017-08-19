@@ -1,7 +1,7 @@
 // @flow
 import React from 'react'
 import cx from 'classnames'
-import { pluck, union, pick, path, merge } from 'ramda'
+import { pluck, union, pick, merge } from 'ramda'
 
 import { hashString, prepareFiles, readImageMetadata } from '../utils/helpers'
 import { saveFileList, retrieveFileList } from '../utils/storage'
@@ -55,8 +55,8 @@ export default class Home extends React.Component {
         showWarning(res)
       })
   }
-  handleSelectionFinish = (selectedItems: any) => {
-    this.setState({selectedImagesIds: selectedItems.map(path(['props', 'image', 'id']))})
+  handleSelection = (selectedImagesIds: any) => {
+    this.setState({selectedImagesIds})
   }
   getAllTags = () => this.state.images.reduce((arr, image) => union(image.data.tags, arr), [])
   getImagesForEditing = () => (
@@ -78,8 +78,8 @@ export default class Home extends React.Component {
             <div className='w--50'>
               <SelectableImagesList
                 images={this.state.images}
-                areAnySelected={this.state.selectedImagesIds.length > 0}
-                onSelectionFinish={this.handleSelectionFinish}
+                selectedImagesIds={this.state.selectedImagesIds}
+                handleSelection={this.handleSelection}
               />
             </div>
             <div className='w--50'>
