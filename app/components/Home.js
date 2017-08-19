@@ -10,6 +10,19 @@ import SelectableImagesList from './SelectableImagesList'
 import ImageThumb from './ImageThumb'
 import { showWarning, showInfo } from './MainToaster'
 
+const NoneSelectedPrompt = () =>
+  <div>
+    👈 &nbsp;&nbsp;Select files in the left panel.
+    <ul>
+      <li><code>Shift</code> + <code>click</code> to select multiple</li>
+    </ul>
+  </div>
+
+const NoFilesPrompt = () =>
+  <div>
+    Choose files using the form above 👆
+  </div>
+
 export default class Home extends React.Component {
   state = {
     images: [],
@@ -55,7 +68,7 @@ export default class Home extends React.Component {
         showWarning(res)
       })
   }
-  handleSelection = (selectedImagesIds: any) => {
+  handleSelection = (selectedImagesIds: Array<string>) => {
     this.setState({selectedImagesIds})
   }
   getAllTags = () => this.state.images.reduce((arr, image) => union(image.data.tags, arr), [])
@@ -90,7 +103,9 @@ export default class Home extends React.Component {
                   allTags={this.getAllTags()}
                   updateCallback={this.updateImages}
                 />
-                : <div className='mb-10 pt-callout pt-intent-primary'>Select files in the left panel</div>}
+                : <div className='mb-10 pt-callout pt-intent-primary'>
+                  {this.state.images.length > 1 ? <NoneSelectedPrompt /> : <NoFilesPrompt />}
+                </div>}
             </div>
           </div>
         </div>
