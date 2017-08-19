@@ -72,7 +72,8 @@ export default class Home extends React.Component {
   handleSelection = (selectedImagesIds: Array<string>) => {
     this.setState({selectedImagesIds})
   }
-  getAllTags = () => this.state.images.reduce((arr, image) => union(image.data.tags, arr), [])
+  getAllTags = () => this.state.images.reduce((acc, image) => union(image.data.tags, acc), [])
+  getAllCustomFieldsKeys = () => this.state.images.reduce((acc, image) => union(keys(image.data.fields), acc), [])
   getImagesForEditing = () => (
     this.state.images.filter(v => this.state.selectedImagesIds.includes(v.id))
   )
@@ -102,6 +103,7 @@ export default class Home extends React.Component {
                   itemsLen={itemsLen}
                   files={this.getImagesForEditing()}
                   allTags={this.getAllTags()}
+                  allCustomFieldsKeys={this.getAllCustomFieldsKeys()}
                   updateCallback={this.updateImages}
                 />
                 : <div className='mb-10 pt-callout pt-intent-primary'>

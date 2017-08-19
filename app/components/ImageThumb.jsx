@@ -1,8 +1,7 @@
 // @flow
 import React from 'react'
 import { merge, evolve } from 'ramda'
-import { Tab2, Tabs2 } from '@blueprintjs/core'
-import { Button } from '@blueprintjs/core'
+import { Tab2, Tabs2, Button } from '@blueprintjs/core'
 
 import {
   writeComment,
@@ -10,16 +9,18 @@ import {
   fixCustomData
 } from '../utils/helpers'
 import TagsEditor from './TagsEditor'
+import CustomFieldsEditor from './CustomFieldsEditor'
 
 const updateSingleFile = (changes: any) => (file: any) => {
   const updatedData = changes && fixCustomData(evolve(changes, file.data))
   return writeComment(file, JSON.stringify(updatedData ? merge(file.data, updatedData) : {}))
 }
 
-export default ({files, updateCallback, allTags, itemsLen}: any) => {
-  const submitCustomData = (changes?: {}) => {
-    Promise.all(files.map(updateSingleFile(changes)))
-      .then(() => updateCallback(files, true))
+export default ({files, updateCallback, itemsLen, ...props}: any) => {
+  const submitCustomData = (changes?: {}, fileNames = null) => {
+    const filteredFiles = files.filter(file => fileNames ? fileNames.includes(file.name) : file)
+    Promise.all(filteredFiles.map(updateSingleFile(changes)))
+      .then(() => updateCallback(filteredFiles, true))
   }
 
   const getRawCustomDataForFiles = () => files.map(v => v.data)
@@ -49,12 +50,19 @@ export default ({files, updateCallback, allTags, itemsLen}: any) => {
           <TagsEditor
             files={files}
             submitHandler={submitCustomData}
-            allTags={allTags}
+            allTags={props.allTags}
           />
-          <Button
-            className='pt-intent-danger mt-20'
-            onClick={removeAllData}
-          >remove all data</Button>
+          <CustomFieldsEditor
+            files={files}
+            allCustomFieldsKeys={props.allCustomFieldsKeys}
+            submitHandler={submitCustomData}
+          />
+          <div className='center'>
+            <Button
+              className='pt-intent-danger mt-30'
+              onClick={removeAllData}
+            >remove all data</Button>
+          </div>
         </div>
       </div>
     </div>
