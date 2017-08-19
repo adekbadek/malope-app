@@ -1,7 +1,7 @@
 // @flow
 import React from 'react'
 import cx from 'classnames'
-import { pluck, union, pick, merge } from 'ramda'
+import { pluck, union, pick, merge, keys } from 'ramda'
 
 import { hashString, prepareFiles, readImageMetadata } from '../utils/helpers'
 import { saveFileList, retrieveFileList } from '../utils/storage'
@@ -60,7 +60,7 @@ export default class Home extends React.Component {
         this.setState(
           state => ({images: newImages}),
           () => {
-            showInfo(`${update ? 'Updated' : 'Imported'} ${images.length} files`)
+            showInfo(`${update ? 'Updated' : 'Imported'} ${images.length} file${images.length > 1 ? 's' : ''}`)
           }
         )
       })

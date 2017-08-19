@@ -6,7 +6,7 @@
 
 html,
 body
-  overflow: hidden
+  overflow-x: hidden
 
 body
   position: relative
@@ -16,6 +16,10 @@ body
 
 ::selection
   background: transparent
+input,
+textarea
+  &::selection
+    background: darken($main, 25%)
 
 pre
   white-space: pre-wrap
@@ -24,6 +28,9 @@ pre
 ol,
 ul
   padding-left: 16px
+
+td
+  vertical-align: middle !important
 
 // atomic classes
 +margins(10, 5)
@@ -48,11 +55,13 @@ ul
   display: inline-block
 
 .center
-  text-align: center
+  text-align: center !important
 
 .w
   &--50
     width: 50%
+  &--100
+    width: 100%
 
 .custom-tabs-panel
   .pt-tab

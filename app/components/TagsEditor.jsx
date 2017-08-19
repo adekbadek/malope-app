@@ -58,7 +58,7 @@ export default ({files, submitHandler, allTags}: any) => {
 
   return (
     <div className={homeStyles.editorSection}>
-      <h5 className='mb-5 mt-10'>Tags:</h5>
+      <h5 className='mtb-15'>Tags:</h5>
       <div className='flex flex--center-h ptb-5'>
         {tags.map(tag => (
           <Tooltip
