@@ -1,7 +1,6 @@
 // @flow
 import React from 'react'
 import { merge, evolve } from 'ramda'
-import cx from 'classnames'
 import { Tab2, Tabs2 } from '@blueprintjs/core'
 
 import {

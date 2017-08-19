@@ -1,11 +1,12 @@
 // @flow
 import React from 'react'
 import cx from 'classnames'
-import Autocomplete from 'react-autocomplete'
 import { append, without, reduce, uniq } from 'ramda'
 import { Tooltip } from '@blueprintjs/core'
 
-import styles from './TagsEditor.sass'
+import AutocompleteInput from './AutocompleteInput'
+import tagsEditorStyles from './TagsEditor.sass'
+import homeStyles from './Home.sass'
 
 const getFileData = (file: any) => ({name: file.name, id: file.id})
 
@@ -16,10 +17,6 @@ const getTags = (files: Array<any>) => {
     files: files.filter(file => file.data.tags.includes(tag)).map(getFileData)
   }))
 }
-
-const matchStrToTerm = (str, value) => (
-  str.toLowerCase().indexOf(value.toLowerCase()) !== -1
-)
 
 class NewTagInput extends React.Component {
   state = {
@@ -42,30 +39,14 @@ class NewTagInput extends React.Component {
   render () {
     return (
       <form onSubmit={this.submit}>
-        <Autocomplete
-          getItemValue={i => i}
-          items={this.props.items}
-          shouldItemRender={matchStrToTerm}
-          inputProps={{
-            className: 'pt-input mtb-5 mr-5 posr',
-            placeholder: `add tag to ${this.props.filesLength} file${this.props.filesLength > 1 ? 's' : ''}`,
-          }}
-          menuStyle={{
-            border: 'none',
-            position: 'fixed',
-            overflow: 'scroll',
-            maxHeight: '140px',
-            borderRadius: '2px',
-            boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
-          }}
-          renderItem={(item, isHighlighted) =>
-            <div className={cx(styles.tagOption, isHighlighted && styles.tagOptionActive)}>
-              {item}
-            </div>
-          }
-          value={this.state.value}
-          onChange={e => this.setState({value: e.target.value})}
+        <AutocompleteInput
           onSelect={this.updateValue}
+          items={this.props.items}
+          value={this.state.value}
+          inputStyle={{height: '22px'}}
+          inputClassName='mtb-5 mr-5'
+          onChange={e => this.setState({value: e.target.value})}
+          placeholder={`add tag to ${this.props.filesLength} file${this.props.filesLength > 1 ? 's' : ''}`}
         />
       </form>
     )
@@ -76,17 +57,17 @@ export default ({files, submitHandler, allTags}: any) => {
   const tags = getTags(files)
 
   return (
-    <div>
-      <h5 className='mt-20'>Tags:</h5>
-      <div className='flex ptb-5'>
+    <div className={homeStyles.editorSection}>
+      <h5 className='mb-5 mt-10'>Tags:</h5>
+      <div className='flex flex--center-h ptb-5'>
         {tags.map(tag => (
           <Tooltip
             key={tag.name}
             isDisabled={files.length <= 1}
             content={tag.files.map(v => v.name).join(', ')}
           >
-            <span className='pt-tag pt-large pt-tag-removable mtb-5 mr-5'>
-              {files.length > 1 && <span className={cx('mr-5 flex--center', styles.tagNum)}>
+            <span className='pt-tag pt-tag-removable mtb-5 mr-5'>
+              {files.length > 1 && <span className={cx('mr-5 flex--center', tagsEditorStyles.tagNum)}>
                 {tag.files.length}
               </span>}
               {tag.name}
