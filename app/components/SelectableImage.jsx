@@ -5,6 +5,9 @@ import { isEmpty } from 'ramda'
 import { EXIF_TAG_NAME, bgImgStyle, jsonParse } from '../utils/helpers'
 import styles from './Home.sass'
 
+const Indicator = ({data, icon}) =>
+  (data && !isEmpty(data)) ? <span className={`mr-5 pt-ui-text pt-icon-${icon}`} /> : null
+
 export default props => {
   const { selected, selecting, image, ...passedProps } = props
 
@@ -28,7 +31,8 @@ export default props => {
           {image.name}
         </div>
         <div>
-          {customData && customData.tags && !isEmpty(customData.tags) && <span className='pt-ui-text pt-icon-tag' />}
+          {customData && <Indicator data={customData.tags} icon='tag' />}
+          {customData && <Indicator data={customData.fields} icon='layers' />}
         </div>
       </div>
     </div>
