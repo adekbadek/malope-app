@@ -1,7 +1,7 @@
 // @flow
 import React from 'react'
 import cx from 'classnames'
-import { pluck, union, pick, merge, keys } from 'ramda'
+import { sort, pluck, union, pick, merge, keys } from 'ramda'
 
 import { hashString, prepareFiles, readImageMetadata, pluralize } from '../utils/helpers'
 import { saveFileList, retrieveFileList } from '../utils/storage'
@@ -46,6 +46,8 @@ export default class Home extends React.Component {
     if (!update) {
       this.setState({selectedImagesIds: []})
     }
+    const order = pluck('id', this.state.images)
+
     Promise.all(
       images.map(image => readImageMetadata(image.path))
     )
@@ -56,7 +58,11 @@ export default class Home extends React.Component {
         const updatedIds = pluck('id', updatedImages)
         const withoutUpdated = this.state.images.filter(v => !updatedIds.includes(v.id))
 
-        const newImages = prepareFiles(update ? union(updatedImages, withoutUpdated) : updatedImages)
+        let newImages = prepareFiles(update ? union(updatedImages, withoutUpdated) : updatedImages)
+        if (update) {
+          // fix ordering which was changed by union()
+          newImages = sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id), newImages)
+        }
         this.setState(
           state => ({images: newImages}),
           () => {
