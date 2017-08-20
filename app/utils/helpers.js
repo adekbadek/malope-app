@@ -1,19 +1,20 @@
+// @flow
 import hasha from 'hasha'
 import exiftool from 'node-exiftool'
 import { find, update, append, uniq, evolve, keys, values, zip, compose, prop, merge, assoc } from 'ramda'
 
-export const mapObjectToPairs = obj => {
+export const mapObjectToPairs = (obj: {}) => {
   return zip(keys(obj), values(obj)).map(v => ({key: v[0], val: v[1]}))
 }
 
-export const hashString = str => hasha(str, {algorithm: 'md5'})
+export const hashString = (str: string) => hasha(str, {algorithm: 'md5'})
 
 export const EXIF_TAG_NAME = 'UserComment'
 
 // NOTE: exiftool must be installed globally for prod to work. dist-exiftool is not working.
 const EXIFToolProcess = new exiftool.ExiftoolProcess('/usr/local/bin/exiftool')
 
-export const readImageMetadata = imagePath => new Promise((resolve, reject) => {
+export const readImageMetadata = (imagePath: string) => new Promise((resolve, reject) => {
   const onSuccess = result => result.data ? resolve(result.data[0]) : reject(result.error)
 
   if (EXIFToolProcess.isOpen) {
@@ -65,9 +66,9 @@ export const prepareFiles = (files: Array<any>) => {
   const createData = file => merge(CUSTOM_DATA_TEMPLATE, parseCustomData(file))
   return files.map(file => assoc('data', createData(file), file))
 }
-export const fixCustomData = (data) => evolve(CUSTOM_DATA_FIX, data)
+export const fixCustomData = (data: {}) => evolve(CUSTOM_DATA_FIX, data)
 
-export const bgImgStyle = path => ({backgroundImage: `url(${normalizePath(path)})`})
+export const bgImgStyle = (path: string) => ({backgroundImage: `url(${normalizePath(path)})`})
 
 // TODO: refactor to avoid reducing twice?
 // TODO: test
@@ -105,7 +106,7 @@ export const groupFieldsData = (files) => {
     }, [])
 }
 
-export const pluralize = (str, items) => {
-  const len = items.length || items
+export const pluralize = (str: string, items: Array<any> | number) => {
+  const len = typeof items === 'number' ? items : items.length
   return `${len} ${str}${len > 1 ? 's' : ''}`
 }

@@ -1,3 +1,4 @@
+// @flow
 import React from 'react'
 import cx from 'classnames'
 import { prop, append, without } from 'ramda'
@@ -16,14 +17,15 @@ export default class SelectableImagesList extends React.Component {
   }
   componentDidMount () {
     this.combokeys = new Combokeys(document.documentElement)
-    this.combokeys.bind('shift', () => { this.setState({multipleSelect: true}) }, 'keydown')
-    this.combokeys.bind('shift', () => { this.setState({multipleSelect: false}) }, 'keyup')
-    this.combokeys.bind('alt', () => { this.setState({alternativeClick: true}) }, 'keydown')
-    this.combokeys.bind('alt', () => { this.setState({alternativeClick: false}) }, 'keyup')
+    this.combokeys && this.combokeys.bind('shift', () => { this.setState({multipleSelect: true}) }, 'keydown')
+    this.combokeys && this.combokeys.bind('shift', () => { this.setState({multipleSelect: false}) }, 'keyup')
+    this.combokeys && this.combokeys.bind('alt', () => { this.setState({alternativeClick: true}) }, 'keydown')
+    this.combokeys && this.combokeys.bind('alt', () => { this.setState({alternativeClick: false}) }, 'keyup')
   }
   componentWillUnmount () {
     this.combokeys && this.combokeys.detach()
   }
+  combokeys = null
   selectAll = () => this.props.handleSelection(this.props.images.map(prop('id')))
   deselectAll = () => this.props.handleSelection([])
   handlePreview = (image) => this.setState({previewedImage: image})

@@ -75,12 +75,16 @@ export default class Home extends React.Component {
         showWarning(res)
       })
   }
-  handleSelection = (selectedImagesIds: Array<string>) => {
+  handleSelection = (selectedImagesIds: Array<string>): void => {
     this.setState({selectedImagesIds})
   }
-  getAllTags = () => this.state.images.reduce((acc, image) => union(image.data.tags, acc), [])
-  getAllCustomFieldsKeys = () => this.state.images.reduce((acc, image) => union(keys(image.data.fields), acc), [])
-  getImagesForEditing = () => (
+  getAllTags = (): Array<string> => (
+    this.state.images.reduce((acc, image) => union(image.data.tags, acc), [])
+  )
+  getAllCustomFieldsKeys = (): Array<string> => (
+    this.state.images.reduce((acc, image) => union(keys(image.data.fields), acc), [])
+  )
+  getImagesForEditing = (): Array<any> => (
     this.state.images.filter(v => this.state.selectedImagesIds.includes(v.id))
   )
   render () {
