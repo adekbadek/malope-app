@@ -167,6 +167,7 @@
     "@blueprintjs/core": "^1.24.0",
     "classnames": "^2.2.5",
     "combokeys": "^2.4.6",
+    "csv": "^1.1.1",
     "devtron": "^1.4.0",
     "electron-debug": "^1.2.0",
     "electron-json-storage": "^3.0.7",

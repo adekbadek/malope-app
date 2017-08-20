@@ -19,7 +19,7 @@ export default class ImagePreview extends React.Component {
   render () {
     const { image } = this.props
     return (
-      <div className='p-10 dialog-inside'>
+      <div className='p-10 dialog__inside'>
         <div className='mb-10 pt-callout pt-intent-primary'>Hover over the image to zoom. Zoom level is <code>{this.state.zoom.toFixed(1)}</code>. Change it with <code>Cmd</code> + <code>+</code> / <code>Cmd</code> + <code>-</code></div>
         <div style={{width: '45%'}}>
           <ReactImageMagnify

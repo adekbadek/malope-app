@@ -2,6 +2,7 @@
 import React from 'react'
 import cx from 'classnames'
 import { sort, pluck, union, pick, merge, keys } from 'ramda'
+import { Button } from '@blueprintjs/core'
 
 import { hashString, prepareFiles, readImageMetadata, pluralize } from '../utils/helpers'
 import { saveFileList, retrieveFileList } from '../utils/storage'
@@ -9,6 +10,7 @@ import styles from './Home.sass'
 import SelectableImagesList from './SelectableImagesList'
 import ImageThumb from './ImageThumb'
 import { showWarning, showInfo } from './MainToaster'
+import CSVImporter from './CSVImporter'
 
 const NoneSelectedPrompt = () =>
   <div>
@@ -27,6 +29,7 @@ const NoFilesPrompt = () =>
 export default class Home extends React.Component {
   state = {
     images: [],
+    showCSVImporter: false,
     selectedImagesIds: [],
   }
   componentDidMount () {
@@ -88,16 +91,20 @@ export default class Home extends React.Component {
     this.state.images.filter(v => this.state.selectedImagesIds.includes(v.id))
   )
   render () {
-    const itemsLen = this.state.selectedImagesIds.length
+    const selectedItemsLen = this.state.selectedImagesIds.length
+    const hasImages = this.state.images.length > 1
     return (
       <div className={cx('plr-20 pt-dark', styles.Main)}>
         <div className={cx('pt-5', styles.container)}>
           <div className='mt-20 flex flex--center-h flex--spread'>
             <h2 className='mt-10 dib'>Image Tagger</h2>
-            <label className='pt-file-upload mt-10'>
-              <input multiple type='file' onChange={this.submitFile} />
-              <span className='pt-file-upload-input'>Choose files</span>
-            </label>
+            <div className='mt-10 flex flex--center-h'>
+              {hasImages && <Button onClick={() => this.setState({showCSVImporter: true})}>Import CSV</Button>}
+              <label className='pt-file-upload ml-10'>
+                <input multiple type='file' onChange={this.submitFile} />
+                <span className='pt-file-upload-input'>Choose images</span>
+              </label>
+            </div>
           </div>
           <div className='mt-40 flex'>
             <div className='w--50'>
@@ -108,20 +115,21 @@ export default class Home extends React.Component {
               />
             </div>
             <div className='w--50'>
-              {itemsLen > 0
+              {selectedItemsLen > 0
                 ? <ImageThumb
-                  itemsLen={itemsLen}
+                  itemsLen={selectedItemsLen}
                   files={this.getImagesForEditing()}
                   allTags={this.getAllTags()}
                   allCustomFieldsKeys={this.getAllCustomFieldsKeys()}
                   updateCallback={this.updateImages}
                 />
                 : <div className='mb-10 pt-callout pt-intent-primary'>
-                  {this.state.images.length > 1 ? <NoneSelectedPrompt /> : <NoFilesPrompt />}
+                  {hasImages ? <NoneSelectedPrompt /> : <NoFilesPrompt />}
                 </div>}
             </div>
           </div>
         </div>
+        <CSVImporter isOpen={this.state.showCSVImporter} onClose={() => this.setState({showCSVImporter: false})} />
       </div>
     )
   }

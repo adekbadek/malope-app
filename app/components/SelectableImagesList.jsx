@@ -65,7 +65,7 @@ export default class SelectableImagesList extends React.Component {
           })}
         </div>
         <Dialog
-          className='pt-dark'
+          className='pt-dark dialog--wide'
           isOpen={!!this.state.previewedImage}
           onClose={this.handleDialogClose}
           title={this.state.previewedImage && this.state.previewedImage.name}

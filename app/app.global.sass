@@ -74,8 +74,9 @@ td
     &:not([aria-disabled="true"]):hover
       color: $main
 
-.pt-dialog
-  width: 90vw
-.dialog-inside
-  max-height: 80vh
-  overflow: scroll
+.dialog
+  &--wide
+    width: 90vw
+  &__inside
+    max-height: 80vh
+    overflow: scroll
