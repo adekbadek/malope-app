@@ -6,9 +6,12 @@ import { Dialog, Button } from '@blueprintjs/core'
 import { parseCSVFile } from '../utils/csv'
 import { showWarning, showInfo } from './MainToaster'
 
+const MOD = '%'
+
 class CSVDataChooser extends React.Component {
   state = {
     imageNameColumn: this.props.columns[0],
+    imageNameModifier: '',
     dataColumns: this.props.columns,
   }
   submit = (e) => {
@@ -33,7 +36,7 @@ class CSVDataChooser extends React.Component {
             <label className='pt-label'>
             1. Select the column which contains image filenames:
             </label>
-            <div className='pt-form-content'>
+            <div className='pt-form-content mt-10'>
               <div className='pt-select'>
                 <select onChange={this.setImageNameColumn} value={this.state.imageNameColumn}>
                   {columns.map((col, i) => (
@@ -43,9 +46,24 @@ class CSVDataChooser extends React.Component {
               </div>
             </div>
             <div className='mt-10 pt-text-muted'>
-              i.e.: {rows.map((row, i) => (
-                <code key={i} className='m-5'>{row[this.state.imageNameColumn]}</code>
-              ))}
+              <input
+                type='text'
+                placeholder={`use ${MOD} as placeholder`}
+                className='pt-input'
+                value={this.state.imageNameModifier}
+                onChange={(e) => this.setState({imageNameModifier: e.target.value})}
+              />
+              <div className='mt-5'>
+                i.e.: {rows.map((row, i) => {
+                  const value = row[this.state.imageNameColumn]
+                  const mod = this.state.imageNameModifier
+                  return (
+                    <code key={i} className='m-5'>
+                      {mod.length > 0 ? mod.replace(MOD, value) : value}
+                    </code>
+                  )
+                })}
+              </div>
             </div>
           </div>
 
@@ -53,7 +71,7 @@ class CSVDataChooser extends React.Component {
             <label className='pt-label'>
             2. Select the columns to be included in image metadata:
             </label>
-            <div className='pt-form-content'>
+            <div className='pt-form-content mt-10'>
               {columns.map((col, i) => (
                 <label key={i} className='pt-control pt-checkbox'>
                   <input
