@@ -1,18 +1,16 @@
 // @flow
 import React from 'react'
-import { keys, take, without, append } from 'ramda'
+import { isEmpty, merge, pick, keys, take, without, append } from 'ramda'
 import { Dialog, Button } from '@blueprintjs/core'
 
-import { parseCSVFile } from '../utils/csv'
+import { parseCSVFile, MOD, IMAGE_NAME_KEY } from '../utils/csv'
 import { showWarning, showInfo } from './MainToaster'
-
-const MOD = '%'
 
 class CSVDataChooser extends React.Component {
   state = {
     imageNameColumn: this.props.columns[0],
     imageNameModifier: '',
-    dataColumns: this.props.columns,
+    columnsForData: this.props.columns,
   }
   submit = (e) => {
     e && e.preventDefault()
@@ -23,8 +21,8 @@ class CSVDataChooser extends React.Component {
   }
   setDataColumns = (e) => {
     const item = e.currentTarget
-    const cols = this.state.dataColumns
-    this.setState({dataColumns: item.checked ? append(item.name, cols) : without([item.name], cols)})
+    const cols = this.state.columnsForData
+    this.setState({columnsForData: item.checked ? append(item.name, cols) : without([item.name], cols)})
   }
   render () {
     const {columns, rows, fileName} = this.props
@@ -77,7 +75,7 @@ class CSVDataChooser extends React.Component {
                   <input
                     type='checkbox'
                     name={col}
-                    checked={this.state.dataColumns.includes(col)}
+                    checked={this.state.columnsForData.includes(col)}
                     onChange={this.setDataColumns}
                   />
                   <span className='pt-control-indicator' />
@@ -101,18 +99,20 @@ export default class CSVImporter extends React.Component {
     columns: [],
     rows: [],
   }
-  submitCSVFile = (e: any) => {
-    const file = e.currentTarget.files[0]
+  handleCSVFile = (file: {path: string, name: string}) => {
     parseCSVFile(file.path, this.state.delimiter)
       .then(table => {
         showInfo(`Imported table with ${table.length} rows`, 3000)
         this.setState({
           fileName: file.name,
           columns: keys(table[0]),
-          rows: take(5, table),
+          rows: table,
         })
       })
       .catch(showWarning)
+  }
+  submitCSVFile = (e: any) => {
+    this.handleCSVFile(e.currentTarget.files[0])
   }
   render () {
     return (
@@ -135,10 +135,13 @@ export default class CSVImporter extends React.Component {
             {this.state.columns.length > 1
               ? <CSVDataChooser
                 columns={this.state.columns}
-                rows={this.state.rows}
+                rows={take(5, this.state.rows)}
                 fileName={this.state.fileName}
-                submitDataInfo={(info) => {
-                  console.log('TODO', info)
+                submitDataInfo={info => {
+                  this.props.submit(
+                    info.imageNameModifier,
+                    this.state.rows.map(row => merge(pick(info.columnsForData, row), {[IMAGE_NAME_KEY]: row[info.imageNameColumn]})),
+                  )
                 }}
               />
               : <div className='mb-10 pt-callout pt-intent-primary'>

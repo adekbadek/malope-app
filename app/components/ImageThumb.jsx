@@ -1,21 +1,15 @@
 // @flow
 import React from 'react'
-import { merge, evolve } from 'ramda'
+import { evolve } from 'ramda'
 import { Tab2, Tabs2, Button } from '@blueprintjs/core'
 
 import {
-  writeComment,
   sameValues,
-  fixCustomData,
-  pluralize
+  pluralize,
+  updateSingleFile
 } from '../utils/helpers'
 import TagsEditor from './TagsEditor'
 import CustomFieldsEditor from './CustomFieldsEditor'
-
-const updateSingleFile = (changes: any) => (file: any) => {
-  const updatedData = changes && fixCustomData(evolve(changes, file.data))
-  return writeComment(file, JSON.stringify(updatedData ? merge(file.data, updatedData) : {}))
-}
 
 export default ({files, updateCallback, itemsLen, ...props}: any) => {
   const submitCustomData = (changes?: {}, fileNames = null) => {

@@ -35,7 +35,7 @@ export const writeComment = (image, comment) => writeImageMetadata(image, {
   [EXIF_TAG_NAME]: comment,
 }, ['overwrite_original', 'codedcharacterset=utf8'])
 
-export const normalizePath = path => path.replace(/ /g, '\\ ')
+export const normalizePath = (path: string) => path.replace(/ /g, '\\ ')
 
 export const jsonParse = (str: string) => {
   try {
@@ -62,11 +62,17 @@ const CUSTOM_DATA_TEMPLATE = {
 const CUSTOM_DATA_FIX = {
   tags: tags => uniq(tags)
 }
+const fixCustomData = (data: {}) => evolve(CUSTOM_DATA_FIX, data)
+export const updateSingleFile = (changes: any) => (file: any) => {
+  const updatedData = changes && fixCustomData(evolve(changes, file.data))
+  console.log('updatedData', updatedData)
+  return writeComment(file, JSON.stringify(updatedData ? merge(file.data, updatedData) : {}))
+}
+
 export const prepareFiles = (files: Array<any>) => {
   const createData = file => merge(CUSTOM_DATA_TEMPLATE, parseCustomData(file))
   return files.map(file => assoc('data', createData(file), file))
 }
-export const fixCustomData = (data: {}) => evolve(CUSTOM_DATA_FIX, data)
 
 export const bgImgStyle = (path: string) => ({backgroundImage: `url(${normalizePath(path)})`})
 

@@ -7,3 +7,6 @@ export const parseCSVFile = (filePath: string, delimiter: string) => new Promise
     err ? reject(err) : resolve(table)
   })
 })
+
+export const MOD = '%'
+export const IMAGE_NAME_KEY = 'IT_IMAGE_NAME'

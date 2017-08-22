@@ -1,16 +1,23 @@
 // @flow
 import React from 'react'
 import cx from 'classnames'
-import { sort, pluck, union, pick, merge, keys } from 'ramda'
+import { append, dissoc, sort, pluck, union, pick, merge, keys } from 'ramda'
 import { Button } from '@blueprintjs/core'
 
-import { hashString, prepareFiles, readImageMetadata, pluralize } from '../utils/helpers'
+import {
+  hashString,
+  prepareFiles,
+  readImageMetadata,
+  pluralize,
+  updateSingleFile
+} from '../utils/helpers'
 import { saveFileList, retrieveFileList } from '../utils/storage'
 import styles from './Home.sass'
 import SelectableImagesList from './SelectableImagesList'
 import ImageThumb from './ImageThumb'
 import { showWarning, showInfo } from './MainToaster'
 import CSVImporter from './CSVImporter'
+import { MOD, IMAGE_NAME_KEY } from '../utils/csv'
 
 const NoneSelectedPrompt = () =>
   <div>
@@ -90,6 +97,24 @@ export default class Home extends React.Component {
   getImagesForEditing = (): Array<any> => (
     this.state.images.filter(v => this.state.selectedImagesIds.includes(v.id))
   )
+  submitCSVData = (imageNameModifier: string, table: Array<{}>) => {
+    let updatedFiles = []
+    const proms = table.map(row => {
+      const imageName = imageNameModifier.replace(MOD, row[IMAGE_NAME_KEY])
+      const foundImage = this.state.images.find(v => v.name === imageName)
+      if (foundImage) {
+        updatedFiles = append(foundImage, updatedFiles)
+        return updateSingleFile({
+          fields: fields => merge(fields, dissoc(IMAGE_NAME_KEY, row))
+        })(foundImage)
+      }
+    })
+    Promise.all(proms).then(() => {
+      this.updateImages(updatedFiles)
+      this.closeCSVImporter()
+    })
+  }
+  closeCSVImporter = () => this.setState({showCSVImporter: false})
   render () {
     const selectedItemsLen = this.state.selectedImagesIds.length
     const hasImages = this.state.images.length > 1
@@ -129,7 +154,11 @@ export default class Home extends React.Component {
             </div>
           </div>
         </div>
-        <CSVImporter isOpen={this.state.showCSVImporter} onClose={() => this.setState({showCSVImporter: false})} />
+        <CSVImporter
+          submit={this.submitCSVData}
+          isOpen={this.state.showCSVImporter}
+          onClose={this.closeCSVImporter}
+        />
       </div>
     )
   }
