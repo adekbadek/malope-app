@@ -1,6 +1,6 @@
 // @flow
 import React from 'react'
-import { isEmpty, merge, pick, keys, take, without, append } from 'ramda'
+import { merge, pick, keys, take, without, append } from 'ramda'
 import { Dialog, Button } from '@blueprintjs/core'
 
 import { parseCSVFile, MOD, IMAGE_NAME_KEY } from '../utils/csv'

@@ -28,9 +28,7 @@ export const readImageMetadata = (imagePath: string) => new Promise((resolve, re
   }
 })
 
-const writeImageMetadata = (image, data) => EXIFToolProcess.writeMetadata(image.path, data)
-
-export const writeComment = (image, comment) => writeImageMetadata(image, {
+export const writeComment = ({path}: {path: string}, comment: string) => EXIFToolProcess.writeMetadata(path, {
   all: '',
   [EXIF_TAG_NAME]: comment,
 }, ['overwrite_original', 'codedcharacterset=utf8'])
@@ -65,7 +63,6 @@ const CUSTOM_DATA_FIX = {
 const fixCustomData = (data: {}) => evolve(CUSTOM_DATA_FIX, data)
 export const updateSingleFile = (changes: any) => (file: any) => {
   const updatedData = changes && fixCustomData(evolve(changes, file.data))
-  console.log('updatedData', updatedData)
   return writeComment(file, JSON.stringify(updatedData ? merge(file.data, updatedData) : {}))
 }
 

@@ -1,6 +1,5 @@
 // @flow
 import React from 'react'
-import { evolve } from 'ramda'
 import { Tab2, Tabs2, Button } from '@blueprintjs/core'
 
 import {
