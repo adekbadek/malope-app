@@ -1,5 +1,6 @@
 // @flow
 import React from 'react'
+import { connect } from 'react-redux'
 import cx from 'classnames'
 import { append, dissoc, sort, pluck, union, pick, merge, keys } from 'ramda'
 import { Button } from '@blueprintjs/core'
@@ -33,7 +34,7 @@ const NoFilesPrompt = () =>
     Choose files using the form above 👆
   </div>
 
-export default class Home extends React.Component {
+class Home extends React.Component {
   state = {
     images: [],
     showCSVImporter: false,
@@ -119,7 +120,7 @@ export default class Home extends React.Component {
     const selectedItemsLen = this.state.selectedImagesIds.length
     const hasImages = this.state.images.length > 1
     return (
-      <div className={cx('plr-20 pt-dark', styles.Main)}>
+      <div className={cx('plr-20', this.props.themeName, styles.Main)}>
         <div className={cx('pt-5', styles.container)}>
           <div className='mt-20 flex flex--center-h flex--spread'>
             <h2 className='mt-10 dib'>Image Tagger</h2>
@@ -163,3 +164,7 @@ export default class Home extends React.Component {
     )
   }
 }
+
+export default connect(state => ({
+  themeName: state.layout.themeName,
+}))(Home)

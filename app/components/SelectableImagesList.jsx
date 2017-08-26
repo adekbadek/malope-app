@@ -1,5 +1,6 @@
 // @flow
 import React from 'react'
+import { connect } from 'react-redux'
 import cx from 'classnames'
 import { prop, append, without } from 'ramda'
 import Combokeys from 'combokeys'
@@ -9,7 +10,7 @@ import styles from './Home.sass'
 import SelectableImage from './SelectableImage'
 import ImagePreview from './ImagePreview'
 
-export default class SelectableImagesList extends React.Component {
+class SelectableImagesList extends React.Component {
   state = {
     previewedImage: null,
     multipleSelect: false,
@@ -65,7 +66,7 @@ export default class SelectableImagesList extends React.Component {
           })}
         </div>
         <Dialog
-          className='pt-dark dialog--wide'
+          className={cx(this.props.themeName, 'dialog--wide')}
           isOpen={!!this.state.previewedImage}
           onClose={this.handleDialogClose}
           title={this.state.previewedImage && this.state.previewedImage.name}
@@ -76,3 +77,7 @@ export default class SelectableImagesList extends React.Component {
     )
   }
 }
+
+export default connect(state => ({
+  themeName: state.layout.themeName,
+}))(SelectableImagesList)

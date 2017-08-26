@@ -2,8 +2,9 @@
 import { combineReducers } from 'redux'
 import { routerReducer as router } from 'react-router-redux'
 
-const rootReducer = combineReducers({
-  router,
-})
+import layout from './layout'
 
-export default rootReducer
+export default combineReducers({
+  router,
+  layout,
+})
