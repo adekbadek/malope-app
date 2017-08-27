@@ -18,6 +18,7 @@ import SelectableImagesList from './SelectableImagesList'
 import ImageThumb from './ImageThumb'
 import { showWarning, showInfo } from './MainToaster'
 import CSVImporter from './CSVImporter'
+import TableView from './TableView'
 
 const NoneSelectedPrompt = () =>
   <div>
@@ -37,6 +38,7 @@ class Home extends React.Component {
   state = {
     images: [],
     showCSVImporter: false,
+    showTableView: false,
     selectedImagesIds: [],
   }
   componentDidMount () {
@@ -105,6 +107,7 @@ class Home extends React.Component {
       })
   }
   closeCSVImporter = () => this.setState({showCSVImporter: false})
+  closeTableView = () => this.setState({showTableView: false})
   render () {
     const selectedItemsLen = this.state.selectedImagesIds.length
     const hasImages = this.state.images.length > 1
@@ -115,6 +118,7 @@ class Home extends React.Component {
             <h2 className='mt-10 dib'>Image Tagger</h2>
             <div className='mt-10 flex flex--center-h'>
               {hasImages && <Button onClick={() => this.setState({showCSVImporter: true})}>Import CSV</Button>}
+              {hasImages && <Button className='ml-10' onClick={() => this.setState({showTableView: true})}>Data Table</Button>}
               <label className='pt-file-upload ml-10'>
                 <input multiple type='file' onChange={this.submitFile} />
                 <span className='pt-file-upload-input'>Choose images</span>
@@ -148,6 +152,15 @@ class Home extends React.Component {
           submit={this.submitCSVData}
           isOpen={this.state.showCSVImporter}
           onClose={this.closeCSVImporter}
+        />
+        <TableView
+          isOpen={this.state.showTableView}
+          images={this.state.images.map(v => ({
+            _FILENAME: v.name,
+            _TAGS: v.data.tags.join(', '),
+            ...v.data.fields,
+          }))}
+          onClose={this.closeTableView}
         />
       </div>
     )
