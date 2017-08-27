@@ -1,7 +1,23 @@
 // @flow
 import hasha from 'hasha'
 import exiftool from 'node-exiftool'
-import { find, update, append, uniq, evolve, keys, values, zip, compose, prop, merge, assoc } from 'ramda'
+import {
+  find,
+  update,
+  append,
+  uniq,
+  evolve,
+  keys,
+  values,
+  zip,
+  compose,
+  prop,
+  merge,
+  assoc,
+  dissoc
+} from 'ramda'
+
+import { MOD, IMAGE_NAME_KEY } from '../utils/csv'
 
 export const mapObjectToPairs = (obj: {}) => {
   return zip(keys(obj), values(obj)).map(v => ({key: v[0], val: v[1]}))
@@ -113,3 +129,20 @@ export const pluralize = (str: string, items: Array<any> | number) => {
   const len = typeof items === 'number' ? items : items.length
   return `${len} ${str}${len > 1 ? 's' : ''}`
 }
+
+export const assignTableDataToImages = (images: Array<any>, imageNameModifier: string, table: Array<{}>) => new Promise((resolve, reject) => {
+  let updatedFiles = []
+  const proms = table.map(row => {
+    const imageName = imageNameModifier.replace(MOD, row[IMAGE_NAME_KEY])
+    const foundImage = images.find(v => v.name === imageName)
+    if (foundImage) {
+      updatedFiles = append(foundImage, updatedFiles)
+      return updateSingleFile({
+        fields: fields => merge(fields, dissoc(IMAGE_NAME_KEY, row))
+      })(foundImage)
+    }
+  })
+  Promise.all(proms)
+    .then(() => resolve(updatedFiles))
+    .catch(reject)
+})
