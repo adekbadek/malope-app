@@ -9,8 +9,8 @@ export default class ImagePreview extends React.Component {
   }
   componentDidMount () {
     this.combokeys = new Combokeys(document.documentElement)
-    this.combokeys && this.combokeys.bind('mod+plus', () => { this.setState(({zoom}) => ({zoom: Math.min(10, zoom + 0.2)})) })
-    this.combokeys && this.combokeys.bind('mod+minus', () => { this.setState(({zoom}) => ({zoom: Math.max(1, zoom - 0.2)})) })
+    this.combokeys && this.combokeys.bind('plus', () => { this.setState(({zoom}) => ({zoom: Math.min(10, zoom + 0.2)})) })
+    this.combokeys && this.combokeys.bind('minus', () => { this.setState(({zoom}) => ({zoom: Math.max(1, zoom - 0.2)})) })
   }
   componentWillUnmount () {
     this.combokeys && this.combokeys.detach()
@@ -20,7 +20,7 @@ export default class ImagePreview extends React.Component {
     const { image } = this.props
     return (
       <div className='p-10 dialog__inside'>
-        <div className='mb-10 pt-callout pt-intent-primary'>Hover over the image to zoom. Zoom level is <code>{this.state.zoom.toFixed(1)}</code>. Change it with <code>Cmd</code> + <code>+</code> / <code>Cmd</code> + <code>-</code></div>
+        <div className='mb-10 pt-callout pt-intent-primary'>Hover over the image to zoom. Zoom level is <code>{this.state.zoom.toFixed(1)}</code>. Change it with <code>+</code> / <code>-</code></div>
         <div style={{width: '45%'}}>
           <ReactImageMagnify
             smallImage={{
