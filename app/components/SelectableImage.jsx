@@ -9,7 +9,7 @@ import styles from './Home.sass'
 const Indicator = ({data, icon}) =>
   (data && !isEmpty(data)) ? <span className={`mr-5 pt-ui-text pt-icon-${icon}`} /> : null
 
-export default props => {
+export default (props: any) => {
   const { selected, selecting, image, ...passedProps } = props
 
   const rawCustomData = image.metadata[EXIF_TAG_NAME]

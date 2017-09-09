@@ -5,7 +5,7 @@ export const MainToaster = Toaster.create({
   position: Position.TOP,
 })
 
-export const showWarning = (message: string | error) => {
+export const showWarning = (message: string | Error) => {
   MainToaster.show({
     message: message.toString(),
     className: 'pt-intent-warning',
