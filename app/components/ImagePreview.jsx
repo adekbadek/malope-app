@@ -19,22 +19,30 @@ export default class ImagePreview extends React.Component {
   render () {
     const { image } = this.props
     return (
-      <div className='p-10 dialog__inside'>
-        <div className='mb-10 pt-callout pt-intent-primary'>Hover over the image to zoom. Zoom level is <code>{this.state.zoom.toFixed(1)}</code>. Change it with <code>+</code> / <code>-</code></div>
-        <div style={{width: '45%'}}>
-          <ReactImageMagnify
-            smallImage={{
-              isFluidWidth: true,
-              src: image.path,
-              alt: image.name,
-            }}
-            largeImage={{
-              width: 400 * this.state.zoom,
-              height: 400 * this.state.zoom,
-              src: image.path,
-              alt: image.name,
-            }}
-          />
+      <div className='pt-10 pr-20'>
+        <div className='pt-card p-5'>
+          <div className='mb-10 pt-callout pt-intent-primary'>
+            Previewing {image.name}
+            <br />
+            Hover over the image to zoom. Zoom level is <code>{this.state.zoom.toFixed(1)}</code>. Change it with <code>+</code> / <code>-</code>
+          </div>
+          <div>
+            <ReactImageMagnify
+              enlargedImageContainerClassName='react-image-magnify__enlarged'
+              enlargedImagePosition='over'
+              smallImage={{
+                isFluidWidth: true,
+                src: image.path,
+                alt: image.name,
+              }}
+              largeImage={{
+                width: 400 * this.state.zoom,
+                height: 400 * this.state.zoom,
+                src: image.path,
+                alt: image.name,
+              }}
+            />
+          </div>
         </div>
       </div>
     )

@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import cx from 'classnames'
 import { findIndex, find, last, prop, append, without } from 'ramda'
 import Combokeys from 'combokeys'
-import { Dialog, Button } from '@blueprintjs/core'
+import { Button } from '@blueprintjs/core'
 
 import styles from './Home.sass'
 import SelectableImage from './SelectableImage'
@@ -22,9 +22,10 @@ class SelectableImagesList extends React.Component {
     this.combokeys && this.combokeys.bind('shift', () => { this.setState({multipleSelect: false}) }, 'keyup')
     this.combokeys && this.combokeys.bind('alt', () => { this.setState({alternativeClick: true}) }, 'keydown')
     this.combokeys && this.combokeys.bind('alt', () => { this.setState({alternativeClick: false}) }, 'keyup')
+    this.combokeys && this.combokeys.bind('esc', this.handlePreviewClose, 'keydown')
     this.combokeys && this.combokeys.bind('space', (e) => {
       e.preventDefault()
-      this.state.previewedImage ? this.handleDialogClose() : this.previewLastSelected()
+      this.state.previewedImage ? this.handlePreviewClose() : this.previewLastSelected()
     }, 'keydown')
     this.combokeys && this.combokeys.bind(['down', 'right'], (e) => {
       e.preventDefault()
@@ -45,7 +46,7 @@ class SelectableImagesList extends React.Component {
   isSelected = (image) => this.props.selectedImagesIds.includes(image.id)
 
   handlePreview = (image) => this.setState({previewedImage: image})
-  handleDialogClose = () => this.setState({previewedImage: null})
+  handlePreviewClose = () => this.setState({previewedImage: null})
   previewLastSelected = () => {
     if (this.props.selectedImagesIds.length > 0) {
       this.handlePreview(
@@ -86,36 +87,34 @@ class SelectableImagesList extends React.Component {
     return (
       <div>
         <div>
-          {this.props.images.length > 0 && <Button onClick={this.selectAll} className='mr-10'>Select all</Button>}
-          {areAnySelected && <Button onClick={this.deselectAll}>Clear selection</Button>}
+          {this.state.previewedImage
+            ? <Button onClick={this.handlePreviewClose}>Close preview</Button>
+            : <span>
+              {this.props.images.length > 0 && <Button onClick={this.selectAll} className='mr-10'>Select all</Button>}
+              {areAnySelected && <Button onClick={this.deselectAll}>Clear selection</Button>}
+            </span>}
         </div>
-        <div className={cx('mt-20', styles.imageContainer)}>
-          {this.props.images.map(image => {
-            return (
-              <SelectableImage
-                key={image.id}
-                image={image}
-                selected={this.isSelected(image)}
-                selecting={this.state.alternativeClick}
-                onClick={() => {
-                  if (this.state.alternativeClick) {
-                    this.handlePreview(image)
-                  } else {
-                    this.selectImage(image)
-                  }
-                }}
-              />
-            )
-          })}
-        </div>
-        <Dialog
-          className={cx(this.props.themeName, 'dialog--wide')}
-          isOpen={!!this.state.previewedImage}
-          onClose={this.handleDialogClose}
-          title={this.state.previewedImage && this.state.previewedImage.name}
-        >
-          {this.state.previewedImage && <ImagePreview image={this.state.previewedImage} />}
-        </Dialog>
+        {this.state.previewedImage
+          ? <ImagePreview image={this.state.previewedImage} />
+          : <div className={cx('mt-20', styles.imageContainer)}>
+            {this.props.images.map(image => {
+              return (
+                <SelectableImage
+                  key={image.id}
+                  image={image}
+                  selected={this.isSelected(image)}
+                  selecting={this.state.alternativeClick}
+                  onClick={() => {
+                    if (this.state.alternativeClick) {
+                      this.handlePreview(image)
+                    } else {
+                      this.selectImage(image)
+                    }
+                  }}
+                />
+              )
+            })}
+          </div>}
       </div>
     )
   }
