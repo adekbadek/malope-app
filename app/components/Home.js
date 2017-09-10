@@ -19,6 +19,7 @@ import DataEditor from './DataEditor'
 import { showWarning, showInfo } from './MainToaster'
 import CSVImporter from './CSVImporter'
 import TableView from './TableView'
+import SearchField from './SearchField'
 
 import type { Image } from '../utils/types'
 
@@ -42,6 +43,7 @@ class Home extends React.PureComponent {
     showCSVImporter: false,
     showTableView: false,
     selectedImagesIds: [],
+    filters: [],
   }
   componentDidMount () {
     retrieveFileList().then(res => {
@@ -108,11 +110,27 @@ class Home extends React.PureComponent {
         this.closeCSVImporter()
       })
   }
+  getFilteredImages = () => {
+    if (this.state.filters.length === 0) {
+      return this.state.images
+    }
+    return this.state.images
+      .filter(image => (
+        this.state.filters.filter(v => {
+          if (v.indexOf('#') === 0) {
+            return image.data.tags.includes(v.replace(/^#/, ''))
+          } else {
+            return image.name.indexOf(v) >= 0
+          }
+        }).length > 0
+      ))
+  }
   closeCSVImporter = () => this.setState({showCSVImporter: false})
   closeTableView = () => this.setState({showTableView: false})
   render () {
     const selectedItemsLen = this.state.selectedImagesIds.length
     const hasImages = this.state.images.length > 1
+    const filteredImages = this.getFilteredImages()
     return (
       <div className={cx('plr-20', this.props.themeName, styles.Main)}>
         <div className={cx('pt-5', styles.container)}>
@@ -129,8 +147,15 @@ class Home extends React.PureComponent {
           </div>
           <div className='mt-40 flex'>
             <div className='w--50'>
+              <SearchField
+                onSearch={(filters) => {
+                  this.setState({filters})
+                }}
+                filteredLen={filteredImages.length}
+                allLen={this.state.images.length}
+              />
               <SelectableImagesList
-                images={this.state.images}
+                images={filteredImages}
                 selectedImagesIds={this.state.selectedImagesIds}
                 handleSelection={this.handleSelection}
               />

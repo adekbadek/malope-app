@@ -173,6 +173,7 @@
     "electron-json-storage": "^3.0.7",
     "hasha": "^3.0.0",
     "history": "^4.6.3",
+    "lodash.debounce": "^4.0.8",
     "ramda": "^0.24.1",
     "react": "^15.6.1",
     "react-addons-css-transition-group": "^15.6.0",
