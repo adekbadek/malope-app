@@ -9,7 +9,7 @@ import { remote } from 'electron'
 
 import { getCSVString } from '../utils/csv'
 
-class TableView extends React.Component {
+class TableView extends React.PureComponent {
   render () {
     const { images, themeName, isOpen, onClose } = this.props
     const colNames = keys(head(images))

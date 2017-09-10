@@ -6,7 +6,7 @@ import { Dialog, Button } from '@blueprintjs/core'
 import { parseCSVFile, MOD, IMAGE_NAME_KEY } from '../utils/csv'
 import { showWarning, showInfo } from './MainToaster'
 
-class CSVDataChooser extends React.Component {
+class CSVDataChooser extends React.PureComponent {
   state = {
     imageNameColumn: this.props.columns[0],
     imageNameModifier: '',
@@ -92,7 +92,7 @@ class CSVDataChooser extends React.Component {
   }
 }
 
-export default class CSVImporter extends React.Component {
+export default class CSVImporter extends React.PureComponent {
   state = {
     delimiter: ';',
     fileName: '',

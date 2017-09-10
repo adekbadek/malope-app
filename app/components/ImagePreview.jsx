@@ -3,7 +3,7 @@ import React from 'react'
 import ReactImageMagnify from 'react-image-magnify'
 import Combokeys from 'combokeys'
 
-export default class ImagePreview extends React.Component {
+export default class ImagePreview extends React.PureComponent {
   state = {
     zoom: 2,
   }

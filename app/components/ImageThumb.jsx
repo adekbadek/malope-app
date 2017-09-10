@@ -11,7 +11,7 @@ import {
   updateSingleFile
 } from '../utils/helpers'
 
-export default class ImageThumb extends React.Component {
+export default class ImageThumb extends React.PureComponent {
   state = {
     topOffset: 140,
   }

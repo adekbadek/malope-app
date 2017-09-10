@@ -2,7 +2,7 @@
 import React from 'react'
 import cx from 'classnames'
 
-export default class Input extends React.Component {
+export default class Input extends React.PureComponent {
   state = {
     value: '',
   }

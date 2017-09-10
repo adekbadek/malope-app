@@ -17,7 +17,7 @@ const getTags = (files: Array<any>) => {
   }))
 }
 
-class NewTagInput extends React.Component {
+class NewTagInput extends React.PureComponent {
   state = {
     value: '',
   }

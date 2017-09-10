@@ -34,7 +34,7 @@ const NoFilesPrompt = () =>
     Choose files using the form above 👆
   </div>
 
-class Home extends React.Component {
+class Home extends React.PureComponent {
   state = {
     images: [],
     showCSVImporter: false,

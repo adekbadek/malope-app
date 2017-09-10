@@ -13,7 +13,7 @@ const INITIAL_STATE = {
   fieldValue: '',
 }
 
-class FieldEditor extends React.Component {
+class FieldEditor extends React.PureComponent {
   state = {
     value: this.props.field.val,
   }
@@ -65,7 +65,7 @@ const FieldsEditorWrapper = ({fieldsObject, ...props}) => {
   )
 }
 
-export default class CustomFieldsEditor extends React.Component {
+export default class CustomFieldsEditor extends React.PureComponent {
   state = INITIAL_STATE
   updateName = (fieldName: string): void => {
     this.setState({fieldName})

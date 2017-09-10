@@ -10,7 +10,7 @@ import styles from './Home.sass'
 import SelectableImage from './SelectableImage'
 import ImagePreview from './ImagePreview'
 
-class SelectableImagesList extends React.Component {
+class SelectableImagesList extends React.PureComponent {
   state = {
     previewedImage: null,
     multipleSelect: false,
