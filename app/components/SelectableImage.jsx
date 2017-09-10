@@ -10,7 +10,7 @@ const Indicator = ({data, icon}) =>
   (data && !isEmpty(data)) ? <span className={`mr-5 pt-ui-text pt-icon-${icon}`} /> : null
 
 export default (props: any) => {
-  const { selected, selecting, image, ...passedProps } = props
+  const { selected, selecting, image, showThumb, ...passedProps } = props
 
   const rawCustomData = image.metadata[EXIF_TAG_NAME]
   const customData = rawCustomData && jsonParse(rawCustomData)
@@ -25,7 +25,7 @@ export default (props: any) => {
     >
       <div
         className={styles.imageTileDisplay}
-        style={bgImgStyle(image.path)}
+        style={showThumb ? bgImgStyle(image.path) : {}}
       />
       <div className={styles.imageTileInfo}>
         <div className={styles.imageTileInfoTitle}>

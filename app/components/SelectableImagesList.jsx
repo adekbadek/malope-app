@@ -12,6 +12,7 @@ import ImagePreview from './ImagePreview'
 
 class SelectableImagesList extends React.PureComponent {
   state = {
+    showThumb: true,
     previewedImage: null,
     multipleSelect: false,
     alternativeClick: false,
@@ -82,24 +83,35 @@ class SelectableImagesList extends React.PureComponent {
     this.props.handleSelection(shiftedSelectedImagesIds)
   }
 
+  toggleThumbnail = () => {
+    this.setState(({showThumb}) => ({showThumb: !showThumb}))
+  }
+
   render () {
-    const areAnySelected = this.props.selectedImagesIds.length > 0
+    const disableDeselect = this.props.selectedImagesIds.length === 0
+    const { previewedImage, showThumb } = this.state
     return (
       <div>
         <div>
-          {this.state.previewedImage
+          {previewedImage
             ? <Button onClick={this.handlePreviewClose}>Close preview</Button>
             : <span>
-              {this.props.images.length > 0 && <Button onClick={this.selectAll} className='mr-10'>Select all</Button>}
-              {areAnySelected && <Button onClick={this.deselectAll}>Clear selection</Button>}
+              {this.props.images.length > 0 && [
+                <Button key='select' onClick={this.selectAll} className='mr-10'>Select all</Button>,
+                <Button key='deselect' disabled={disableDeselect} className='mr-10' onClick={this.deselectAll}>Clear selection</Button>
+              ]}
+              {this.props.images.length > 0 && <Button
+                onClick={this.toggleThumbnail}
+              >{showThumb ? 'Hide' : 'Show'} thumbnails</Button>}
             </span>}
         </div>
-        {this.state.previewedImage
-          ? <ImagePreview image={this.state.previewedImage} />
+        {previewedImage
+          ? <ImagePreview image={previewedImage} />
           : <div className={cx('mt-20', styles.imageContainer)}>
             {this.props.images.map(image => {
               return (
                 <SelectableImage
+                  showThumb={this.state.showThumb}
                   key={image.id}
                   image={image}
                   selected={this.isSelected(image)}
