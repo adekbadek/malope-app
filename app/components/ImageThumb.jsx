@@ -2,13 +2,14 @@
 import React from 'react'
 import { Tab2, Tabs2, Button } from '@blueprintjs/core'
 
+import NamesList from './NamesList'
+import TagsEditor from './TagsEditor'
+import CustomFieldsEditor from './CustomFieldsEditor'
 import {
   sameValues,
   pluralize,
   updateSingleFile
 } from '../utils/helpers'
-import TagsEditor from './TagsEditor'
-import CustomFieldsEditor from './CustomFieldsEditor'
 
 export default class ImageThumb extends React.Component {
   state = {
@@ -49,9 +50,10 @@ export default class ImageThumb extends React.Component {
           maxHeight: `calc(100vh - ${this.state.topOffset}px)`
         }}
       >
-        <div>{
-          `Editing ${pluralize('item', itemsLen)}: ${files.map(v => v.name).join(', ')}`
-        }</div>
+        <div>
+          {`Editing ${pluralize('item', itemsLen)}: `}
+          <NamesList names={files.map(v => v.name)} />
+        </div>
         <div>
           <div className='mt-20' style={{padding: '0 1px'}}>
             <TagsEditor

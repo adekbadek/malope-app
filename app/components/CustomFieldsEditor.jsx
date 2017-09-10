@@ -4,6 +4,7 @@ import { omit, merge } from 'ramda'
 import { Button } from '@blueprintjs/core'
 
 import AutocompleteInput from './AutocompleteInput'
+import NamesList from './NamesList'
 import EditorWrapper from './EditorWrapper'
 import { pluralize, mapObjectToPairs, FILENAMES_SEPARATOR, groupFieldsData } from '../utils/helpers'
 
@@ -49,7 +50,9 @@ const FieldsEditorWrapper = ({fieldsObject, ...props}) => {
   const fields = mapObjectToPairs(fieldsObject)
   return (
     <div className='mb-10 p-0 pt-card pt-card pt-card--dark'>
-      <div style={{padding: '6px 12px'}}>{props.names}</div>
+      <div style={{padding: '6px 12px'}}>
+        <NamesList names={props.names} />
+      </div>
       <table className='w--100 pt-table pt-bordered pt-condensed'>
         <tbody>
           {fields.length > 0
@@ -76,11 +79,11 @@ export default class CustomFieldsEditor extends React.Component {
       this.setState(INITIAL_STATE)
     }
   }
-  updateFields = (field: any, names?: string) => {
-    this.props.submitHandler({fields: fields => merge(fields, field)}, names && names.split(FILENAMES_SEPARATOR))
+  updateFields = (field: any, names?: Array<string>) => {
+    this.props.submitHandler({fields: fields => merge(fields, field)}, names && names)
   }
-  handleRemoveField = (key: string, names: string) => {
-    this.props.submitHandler({fields: omit([key])}, names && names.split(FILENAMES_SEPARATOR))
+  handleRemoveField = (key: string, names: Array<string>) => {
+    this.props.submitHandler({fields: omit([key])}, names && names)
   }
   render () {
     return (

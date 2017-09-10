@@ -92,7 +92,7 @@ export const bgImgStyle = (path: string) => ({backgroundImage: `url(${normalizeP
 // TODO: refactor to avoid reducing twice?
 // TODO: test
 export const FILENAMES_SEPARATOR = ', '
-export const groupFieldsData = (files) => {
+export const groupFieldsData = (files: any) => {
   // group the fields, so we get array of {names, fields} objects
   return files
     .map(file => mapObjectToPairs(file.data.fields).map(field => ({fields: {[field.key]: field.val}, names: file.name})))
@@ -123,6 +123,7 @@ export const groupFieldsData = (files) => {
         return append(val, acc)
       }
     }, [])
+    .map(val => assoc('names', val.names.split(FILENAMES_SEPARATOR), val))
 }
 
 export const pluralize = (str: string, items: Array<any> | number) => {
