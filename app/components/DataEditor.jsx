@@ -11,7 +11,7 @@ import {
   updateSingleFile
 } from '../utils/helpers'
 
-export default class ImageThumb extends React.PureComponent {
+export default class DataEditor extends React.PureComponent {
   state = {
     topOffset: 140,
   }
@@ -21,8 +21,9 @@ export default class ImageThumb extends React.PureComponent {
       topOffset: box.top,
     })
   }
-  submitCustomData = (changes?: {}, fileNames: any = null) => {
-    const filteredFiles = this.props.files.filter(file => fileNames ? fileNames.includes(file.name) : file)
+  submitCustomData = (changes?: {}, fileNames: Array<string> = []) => {
+    const filteredFiles = this.props.files
+      .filter(file => fileNames.length > 0 ? fileNames.includes(file.name) : file)
     Promise.all(filteredFiles.map(updateSingleFile(changes)))
       .then(() => this.props.updateCallback(filteredFiles, true))
   }
@@ -32,7 +33,7 @@ export default class ImageThumb extends React.PureComponent {
 
   removeAllData = () => this.submitCustomData()
 
-  getPanel = (data: any) => (
+  getPanel = (data: Array<{}>) => (
     sameValues(data)
       ? <pre className='mb-0'>{JSON.stringify(data[0])}</pre>
       : <div className='mt-10 pt-callout pt-intent-warning'>

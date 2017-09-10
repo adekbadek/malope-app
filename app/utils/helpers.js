@@ -14,10 +14,13 @@ import {
   prop,
   merge,
   assoc,
-  dissoc
+  dissoc,
+  findIndex
 } from 'ramda'
 
 import { MOD, IMAGE_NAME_KEY } from '../utils/csv'
+
+import type { Image } from '../utils/types'
 
 export const mapObjectToPairs = (obj: {}) => {
   return zip(keys(obj), values(obj)).map(v => ({key: v[0], val: v[1]}))
@@ -59,12 +62,10 @@ export const jsonParse = (str: string) => {
   }
 }
 
-export const TAGS_JOIN = '|'
+export const sameValues = (arr: Array<{}>) => arr.every(v => JSON.stringify(v) === JSON.stringify(arr[0]))
 
-export const sameValues = (arr: Array<any>) => arr.every(v => JSON.stringify(v) === JSON.stringify(arr[0]))
-
-export const getRawCustomData = (image: any) => (
-  prop(EXIF_TAG_NAME, image.metadata) || JSON.stringify({})
+export const getRawCustomData = (image: Image): string => (
+  (image.metadata && image.metadata[EXIF_TAG_NAME]) || JSON.stringify({})
 )
 
 export const parseCustomData = compose(jsonParse, getRawCustomData)
@@ -131,7 +132,7 @@ export const pluralize = (str: string, items: Array<any> | number) => {
   return `${len} ${str}${len > 1 ? 's' : ''}`
 }
 
-export const assignTableDataToImages = (images: Array<any>, imageNameModifier: string, table: Array<{}>) => new Promise((resolve, reject) => {
+export const assignTableDataToImages = (images: Array<Image>, imageNameModifier: string, table: Array<{}>) => new Promise((resolve, reject) => {
   let updatedFiles = []
   const proms = table.map(row => {
     const imageName = imageNameModifier.replace(MOD, row[IMAGE_NAME_KEY])
@@ -147,3 +148,15 @@ export const assignTableDataToImages = (images: Array<any>, imageNameModifier: s
     .then(() => resolve(updatedFiles))
     .catch(reject)
 })
+
+export const shiftSelectedIds = (imageIds: Array<string>, images: Array<Image>, forward: boolean) => {
+  const lastOne = images.length - 1
+  return imageIds.map(imageId => {
+    const index = findIndex(v => v.id === imageId, images)
+    if (forward) {
+      return images[index === lastOne ? 0 : index + 1].id
+    } else {
+      return images[index === 0 ? lastOne : index - 1].id
+    }
+  })
+}

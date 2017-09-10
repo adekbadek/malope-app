@@ -2,7 +2,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import cx from 'classnames'
-import { sort, pluck, union, pick, merge, keys } from 'ramda'
+import { sort, union, pick, merge, keys } from 'ramda'
 import { Button } from '@blueprintjs/core'
 
 import {
@@ -15,10 +15,12 @@ import {
 import { saveFileList, retrieveFileList } from '../utils/storage'
 import styles from './Home.sass'
 import SelectableImagesList from './SelectableImagesList'
-import ImageThumb from './ImageThumb'
+import DataEditor from './DataEditor'
 import { showWarning, showInfo } from './MainToaster'
 import CSVImporter from './CSVImporter'
 import TableView from './TableView'
+
+import type { Image } from '../utils/types'
 
 const NoneSelectedPrompt = () =>
   <div>
@@ -54,11 +56,11 @@ class Home extends React.PureComponent {
       this.updateImages(images)
     }
   }
-  updateImages = (images: any = this.state.images, update: boolean = false) => {
+  updateImages = (images: Array<any> = this.state.images, update: boolean = false) => {
     if (!update) {
       this.setState({selectedImagesIds: []})
     }
-    const order = pluck('id', this.state.images)
+    const order = this.state.images.map(v => v.id)
 
     Promise.all(
       images.map(image => readImageMetadata(image.path))
@@ -67,7 +69,7 @@ class Home extends React.PureComponent {
         const updatedImages = images.map((image, i) => (
           merge(image, {metadata: metadata[i], id: hashString(image.path)})
         ))
-        const updatedIds = pluck('id', updatedImages)
+        const updatedIds = updatedImages.map(v => v.id)
         const withoutUpdated = this.state.images.filter(v => !updatedIds.includes(v.id))
 
         let newImages = prepareFiles(update ? union(updatedImages, withoutUpdated) : updatedImages)
@@ -96,7 +98,7 @@ class Home extends React.PureComponent {
   getAllCustomFieldsKeys = (): Array<string> => (
     this.state.images.reduce((acc, image) => union(keys(image.data.fields), acc), [])
   )
-  getImagesForEditing = (): Array<any> => (
+  getImagesForEditing = (): Array<Image> => (
     this.state.images.filter(v => this.state.selectedImagesIds.includes(v.id))
   )
   submitCSVData = (imageNameModifier: string, table: Array<{}>) => {
@@ -135,7 +137,7 @@ class Home extends React.PureComponent {
             </div>
             <div className='w--50'>
               {selectedItemsLen > 0
-                ? <ImageThumb
+                ? <DataEditor
                   itemsLen={selectedItemsLen}
                   files={this.getImagesForEditing()}
                   allTags={this.getAllTags()}

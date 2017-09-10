@@ -2,13 +2,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import cx from 'classnames'
-import { findIndex, find, last, prop, append, without } from 'ramda'
+import { find, last, prop, append, without } from 'ramda'
 import Combokeys from 'combokeys'
 import { Button } from '@blueprintjs/core'
 
 import styles from './Home.sass'
 import SelectableImage from './SelectableImage'
 import ImagePreview from './ImagePreview'
+import { shiftSelectedIds } from '../utils/helpers'
 
 class SelectableImagesList extends React.PureComponent {
   state = {
@@ -30,11 +31,15 @@ class SelectableImagesList extends React.PureComponent {
     }, 'keydown')
     this.combokeys && this.combokeys.bind(['down', 'right'], (e) => {
       e.preventDefault()
-      this.shiftSelection(true)
+      this.props.handleSelection(
+        shiftSelectedIds(this.props.selectedImagesIds, this.props.images, true)
+      )
     }, 'keydown')
     this.combokeys && this.combokeys.bind(['up', 'left'], (e) => {
       e.preventDefault()
-      this.shiftSelection(false)
+      this.props.handleSelection(
+        shiftSelectedIds(this.props.selectedImagesIds, this.props.images, false)
+      )
     }, 'keydown')
   }
   componentWillUnmount () {
@@ -68,20 +73,6 @@ class SelectableImagesList extends React.PureComponent {
     }
     this.props.handleSelection(selection)
   }
-  shiftSelection = (forward: boolean) => {
-    const images = this.props.images
-    const lastOne = images.length - 1
-    const shiftedSelectedImagesIds = this.props.selectedImagesIds
-      .map(imageId => {
-        const index = findIndex(v => v.id === imageId, images)
-        if (forward) {
-          return images[index === lastOne ? 0 : index + 1].id
-        } else {
-          return images[index === 0 ? lastOne : index - 1].id
-        }
-      })
-    this.props.handleSelection(shiftedSelectedImagesIds)
-  }
 
   toggleThumbnail = () => {
     this.setState(({showThumb}) => ({showThumb: !showThumb}))
@@ -108,24 +99,22 @@ class SelectableImagesList extends React.PureComponent {
         {previewedImage
           ? <ImagePreview image={previewedImage} />
           : <div className={cx('mt-20', styles.imageContainer)}>
-            {this.props.images.map(image => {
-              return (
-                <SelectableImage
-                  showThumb={this.state.showThumb}
-                  key={image.id}
-                  image={image}
-                  selected={this.isSelected(image)}
-                  selecting={this.state.alternativeClick}
-                  onClick={() => {
-                    if (this.state.alternativeClick) {
-                      this.handlePreview(image)
-                    } else {
-                      this.selectImage(image)
-                    }
-                  }}
-                />
-              )
-            })}
+            {this.props.images.map(image => (
+              <SelectableImage
+                showThumb={this.state.showThumb}
+                key={image.id}
+                image={image}
+                selected={this.isSelected(image)}
+                selecting={this.state.alternativeClick}
+                onClick={() => {
+                  if (this.state.alternativeClick) {
+                    this.handlePreview(image)
+                  } else {
+                    this.selectImage(image)
+                  }
+                }}
+              />
+            ))}
           </div>}
       </div>
     )
