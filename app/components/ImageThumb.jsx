@@ -1,5 +1,6 @@
 // @flow
 import React from 'react'
+import cx from 'classnames'
 import { Tab2, Tabs2, Button } from '@blueprintjs/core'
 
 import {
@@ -9,6 +10,7 @@ import {
 } from '../utils/helpers'
 import TagsEditor from './TagsEditor'
 import CustomFieldsEditor from './CustomFieldsEditor'
+import homeStyles from './Home.sass'
 
 export default class ImageThumb extends React.Component {
   state = {
@@ -54,10 +56,6 @@ export default class ImageThumb extends React.Component {
         }</div>
         <div>
           <div className='mt-20'>
-            <Tabs2 className='custom-tabs-panel' animate={false}>
-              <Tab2 id='custom' title='Custom Data' panel={this.getPanel(this.getRawCustomDataForFiles())} />
-              <Tab2 id='all' title='All Metadata' panel={this.getPanel(this.getRawDataForFiles())} />
-            </Tabs2>
             <TagsEditor
               files={files}
               submitHandler={this.submitCustomData}
@@ -74,6 +72,10 @@ export default class ImageThumb extends React.Component {
                 onClick={() => window.confirm('Are you sure?') && this.removeAllData()}
               >remove all data</Button>
             </div>
+            <Tabs2 className={cx(homeStyles.editorSection, 'custom-tabs-panel mt-20 pt-10')} animate={false}>
+              <Tab2 id='custom' title='Custom Data' panel={this.getPanel(this.getRawCustomDataForFiles())} />
+              <Tab2 id='all' title='All Metadata' panel={this.getPanel(this.getRawDataForFiles())} />
+            </Tabs2>
           </div>
         </div>
       </div>

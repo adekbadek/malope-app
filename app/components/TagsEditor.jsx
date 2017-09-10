@@ -6,7 +6,6 @@ import { Tooltip } from '@blueprintjs/core'
 
 import AutocompleteInput from './AutocompleteInput'
 import tagsEditorStyles from './TagsEditor.sass'
-import homeStyles from './Home.sass'
 import { pluralize } from '../utils/helpers'
 
 const getFileData = (file: any) => ({name: file.name, id: file.id})
@@ -58,7 +57,7 @@ export default ({files, submitHandler, allTags}: any) => {
   const tags = getTags(files)
 
   return (
-    <div className={homeStyles.editorSection}>
+    <div>
       <h5 className='mtb-15'>Tags:</h5>
       <div className='flex flex--center-h ptb-5'>
         {tags
