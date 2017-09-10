@@ -61,24 +61,26 @@ export default ({files, submitHandler, allTags}: any) => {
     <div className={homeStyles.editorSection}>
       <h5 className='mtb-15'>Tags:</h5>
       <div className='flex flex--center-h ptb-5'>
-        {tags.map(tag => (
-          <Tooltip
-            key={tag.name}
-            isDisabled={files.length <= 1}
-            content={tag.files.map(v => v.name).join(', ')}
-          >
-            <span className='pt-tag pt-tag-removable mtb-5 mr-5'>
-              {files.length > 1 && <span className={cx('mr-5 flex--center', tagsEditorStyles.tagNum)}>
-                {tag.files.length}
-              </span>}
-              {tag.name}
-              <button
-                className='pt-tag-remove'
-                onClick={() => submitHandler({tags: without([tag.name])})}
-              />
-            </span>
-          </Tooltip>
-        ))}
+        {tags
+          .sort((a, b) => files.length ? (a.files.length < b.files.length ? 1 : -1) : 0)
+          .map(tag => (
+            <Tooltip
+              key={tag.name}
+              isDisabled={files.length <= 1}
+              content={tag.files.map(v => v.name).join(', ')}
+            >
+              <span className='pt-tag pt-tag-removable mtb-5 mr-5'>
+                {files.length > 1 && <span className={cx('mr-5 flex--center', tagsEditorStyles.tagNum)}>
+                  {tag.files.length}
+                </span>}
+                {tag.name}
+                <button
+                  className='pt-tag-remove'
+                  onClick={() => submitHandler({tags: without([tag.name])})}
+                />
+              </span>
+            </Tooltip>
+          ))}
         <NewTagInput
           items={allTags.filter(tag => !tags.map(v => v.name).includes(tag))}
           filesLength={files.length}
