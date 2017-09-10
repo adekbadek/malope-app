@@ -88,15 +88,19 @@ export default class CustomFieldsEditor extends React.Component {
   render () {
     return (
       <EditorWrapper title='Custom Fields:'>
-        <div>{groupFieldsData(this.props.files).map((data, i) => (
-          <FieldsEditorWrapper
-            key={i}
-            names={data.names}
-            fieldsObject={data.fields}
-            editHandler={this.updateFields}
-            removeHandler={this.handleRemoveField}
-          />
-        ))}</div>
+        <div>{
+          groupFieldsData(this.props.files)
+            .sort((a, b) => a.names.length > b.names.length ? -1 : 1)
+            .map((data, i) => (
+              <FieldsEditorWrapper
+                key={i}
+                names={data.names}
+                fieldsObject={data.fields}
+                editHandler={this.updateFields}
+                removeHandler={this.handleRemoveField}
+              />
+            ))
+        }</div>
         <div className='to-front'>
           <div className='flex mt-10'>
             <AutocompleteInput
