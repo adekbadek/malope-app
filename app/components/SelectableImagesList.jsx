@@ -2,7 +2,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import cx from 'classnames'
-import { find, last, prop, append, without } from 'ramda'
+import { findIndex, find, last, prop, append, without } from 'ramda'
 import Combokeys from 'combokeys'
 import { Dialog, Button } from '@blueprintjs/core'
 
@@ -26,14 +26,26 @@ class SelectableImagesList extends React.Component {
       e.preventDefault()
       this.state.previewedImage ? this.handleDialogClose() : this.previewLastSelected()
     }, 'keydown')
+    this.combokeys && this.combokeys.bind(['down', 'right'], (e) => {
+      e.preventDefault()
+      this.shiftSelection(true)
+    }, 'keydown')
+    this.combokeys && this.combokeys.bind(['up', 'left'], (e) => {
+      e.preventDefault()
+      this.shiftSelection(false)
+    }, 'keydown')
   }
   componentWillUnmount () {
     this.combokeys && this.combokeys.detach()
   }
   combokeys = null
+
   selectAll = () => this.props.handleSelection(this.props.images.map(prop('id')))
   deselectAll = () => this.props.handleSelection([])
+  isSelected = (image) => this.props.selectedImagesIds.includes(image.id)
+
   handlePreview = (image) => this.setState({previewedImage: image})
+  handleDialogClose = () => this.setState({previewedImage: null})
   previewLastSelected = () => {
     if (this.props.selectedImagesIds.length > 0) {
       this.handlePreview(
@@ -44,10 +56,32 @@ class SelectableImagesList extends React.Component {
       )
     }
   }
-  handleDialogClose = () => this.setState({previewedImage: null})
+
+  selectImage = (image) => {
+    const isSelected = this.isSelected(image)
+    const areManySelected = this.props.selectedImagesIds.length > 1
+    let selection = isSelected && !areManySelected ? [] : [image.id]
+    if (this.state.multipleSelect) {
+      selection = isSelected ? without([image.id], this.props.selectedImagesIds) : append(image.id, this.props.selectedImagesIds)
+    }
+    this.props.handleSelection(selection)
+  }
+  shiftSelection = (forward: boolean) => {
+    const images = this.props.images
+    const lastOne = images.length - 1
+    const shiftedSelectedImagesIds = this.props.selectedImagesIds
+      .map(imageId => {
+        const index = findIndex(v => v.id === imageId, images)
+        if (forward) {
+          return images[index === lastOne ? 0 : index + 1].id
+        } else {
+          return images[index === 0 ? lastOne : index - 1].id
+        }
+      })
+    this.props.handleSelection(shiftedSelectedImagesIds)
+  }
 
   render () {
-    const areManySelected = this.props.selectedImagesIds.length > 1
     const areAnySelected = this.props.selectedImagesIds.length > 0
     return (
       <div>
@@ -57,22 +91,17 @@ class SelectableImagesList extends React.Component {
         </div>
         <div className={cx('mt-20', styles.imageContainer)}>
           {this.props.images.map(image => {
-            const isSelected = this.props.selectedImagesIds.includes(image.id)
             return (
               <SelectableImage
                 key={image.id}
                 image={image}
-                selected={isSelected}
+                selected={this.isSelected(image)}
                 selecting={this.state.alternativeClick}
                 onClick={() => {
                   if (this.state.alternativeClick) {
                     this.handlePreview(image)
                   } else {
-                    let selection = isSelected && !areManySelected ? [] : [image.id]
-                    if (this.state.multipleSelect) {
-                      selection = isSelected ? without([image.id], this.props.selectedImagesIds) : append(image.id, this.props.selectedImagesIds)
-                    }
-                    this.props.handleSelection(selection)
+                    this.selectImage(image)
                   }
                 }}
               />
