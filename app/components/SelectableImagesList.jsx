@@ -2,7 +2,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import cx from 'classnames'
-import { prop, append, without } from 'ramda'
+import { find, last, prop, append, without } from 'ramda'
 import Combokeys from 'combokeys'
 import { Dialog, Button } from '@blueprintjs/core'
 
@@ -22,6 +22,10 @@ class SelectableImagesList extends React.Component {
     this.combokeys && this.combokeys.bind('shift', () => { this.setState({multipleSelect: false}) }, 'keyup')
     this.combokeys && this.combokeys.bind('alt', () => { this.setState({alternativeClick: true}) }, 'keydown')
     this.combokeys && this.combokeys.bind('alt', () => { this.setState({alternativeClick: false}) }, 'keyup')
+    this.combokeys && this.combokeys.bind('space', (e) => {
+      e.preventDefault()
+      this.state.previewedImage ? this.handleDialogClose() : this.previewLastSelected()
+    }, 'keydown')
   }
   componentWillUnmount () {
     this.combokeys && this.combokeys.detach()
@@ -30,6 +34,16 @@ class SelectableImagesList extends React.Component {
   selectAll = () => this.props.handleSelection(this.props.images.map(prop('id')))
   deselectAll = () => this.props.handleSelection([])
   handlePreview = (image) => this.setState({previewedImage: image})
+  previewLastSelected = () => {
+    if (this.props.selectedImagesIds.length > 0) {
+      this.handlePreview(
+        find(
+          v => v.id === last(this.props.selectedImagesIds),
+          this.props.images
+        )
+      )
+    }
+  }
   handleDialogClose = () => this.setState({previewedImage: null})
 
   render () {
