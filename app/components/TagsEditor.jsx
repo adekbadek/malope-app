@@ -1,20 +1,18 @@
 // @flow
 import React from 'react'
 import cx from 'classnames'
-import { append, without, reduce, uniq } from 'ramda'
+import { append, without, reduce, uniq, pick } from 'ramda'
 import { Tooltip } from '@blueprintjs/core'
 
 import AutocompleteInput from './AutocompleteInput'
 import tagsEditorStyles from './TagsEditor.sass'
 import { pluralize } from '../utils/helpers'
 
-const getFileData = (file: any) => ({name: file.name, id: file.id})
-
 const getTags = (files: Array<any>) => {
   const rawTags = reduce((arr, file) => arr.concat(file.data.tags), [], files) || []
   return uniq(rawTags).map(tag => ({
     name: tag,
-    files: files.filter(file => file.data.tags.includes(tag)).map(getFileData)
+    files: files.filter(file => file.data.tags.includes(tag)).map(pick(['name', 'id']))
   }))
 }
 
