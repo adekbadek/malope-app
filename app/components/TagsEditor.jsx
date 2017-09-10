@@ -5,6 +5,7 @@ import { append, without, reduce, uniq, pick } from 'ramda'
 import { Tooltip } from '@blueprintjs/core'
 
 import AutocompleteInput from './AutocompleteInput'
+import EditorWrapper from './EditorWrapper'
 import tagsEditorStyles from './TagsEditor.sass'
 import { pluralize } from '../utils/helpers'
 
@@ -42,7 +43,7 @@ class NewTagInput extends React.Component {
           items={this.props.items}
           value={this.state.value}
           inputStyle={{height: '22px'}}
-          inputClassName='mtb-5 mr-5'
+          inputClassName='mb-5 mr-5'
           onChange={e => this.setState({value: e.target.value})}
           placeholder={`add tag to ${pluralize('file', this.props.filesLength)}`}
         />
@@ -55,9 +56,8 @@ export default ({files, submitHandler, allTags}: any) => {
   const tags = getTags(files)
 
   return (
-    <div>
-      <h5 className='mtb-15'>Tags:</h5>
-      <div className='flex flex--center-h ptb-5'>
+    <EditorWrapper title='Tags:'>
+      <div className='flex flex--center-h'>
         {tags
           .sort((a, b) => files.length ? (a.files.length < b.files.length ? 1 : -1) : 0)
           .map(tag => (
@@ -66,7 +66,7 @@ export default ({files, submitHandler, allTags}: any) => {
               isDisabled={files.length <= 1}
               content={tag.files.map(v => v.name).join(', ')}
             >
-              <span className='pt-tag pt-tag-removable mtb-5 mr-5'>
+              <span className='pt-tag pt-tag-removable mb-5 mr-5'>
                 {files.length > 1 && <span className={cx('mr-5 flex--center', tagsEditorStyles.tagNum)}>
                   {tag.files.length}
                 </span>}
@@ -84,6 +84,6 @@ export default ({files, submitHandler, allTags}: any) => {
           onSubmit={name => submitHandler({tags: append(name)})}
         />
       </div>
-    </div>
+    </EditorWrapper>
   )
 }

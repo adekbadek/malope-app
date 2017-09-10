@@ -1,6 +1,5 @@
 // @flow
 import React from 'react'
-import cx from 'classnames'
 import { Tab2, Tabs2, Button } from '@blueprintjs/core'
 
 import {
@@ -10,7 +9,6 @@ import {
 } from '../utils/helpers'
 import TagsEditor from './TagsEditor'
 import CustomFieldsEditor from './CustomFieldsEditor'
-import homeStyles from './Home.sass'
 
 export default class ImageThumb extends React.Component {
   state = {
@@ -35,8 +33,8 @@ export default class ImageThumb extends React.Component {
 
   getPanel = (data: any) => (
     sameValues(data)
-      ? <pre className='mb-10'>{JSON.stringify(data[0])}</pre>
-      : <div className='mtb-10 pt-callout pt-intent-warning'>
+      ? <pre className='mb-0'>{JSON.stringify(data[0])}</pre>
+      : <div className='mt-10 pt-callout pt-intent-warning'>
           Data differs between selected files.
       </div>
   )
@@ -55,7 +53,7 @@ export default class ImageThumb extends React.Component {
           `Editing ${pluralize('item', itemsLen)}: ${files.map(v => v.name).join(', ')}`
         }</div>
         <div>
-          <div className='mt-20'>
+          <div className='mt-20' style={{padding: '0 1px'}}>
             <TagsEditor
               files={files}
               submitHandler={this.submitCustomData}
@@ -68,11 +66,11 @@ export default class ImageThumb extends React.Component {
             />
             <div className='center'>
               <Button
-                className='pt-intent-danger mt-30'
+                className='pt-intent-danger mt-20'
                 onClick={() => window.confirm('Are you sure?') && this.removeAllData()}
               >remove all data</Button>
             </div>
-            <Tabs2 className={cx(homeStyles.editorSection, 'custom-tabs-panel mt-20 pt-10')} animate={false}>
+            <Tabs2 className='custom-tabs-panel mt-20 pt-10 pt-card' animate={false}>
               <Tab2 id='custom' title='Custom Data' panel={this.getPanel(this.getRawCustomDataForFiles())} />
               <Tab2 id='all' title='All Metadata' panel={this.getPanel(this.getRawDataForFiles())} />
             </Tabs2>

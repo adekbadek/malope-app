@@ -4,7 +4,7 @@ import { omit, merge } from 'ramda'
 import { Button } from '@blueprintjs/core'
 
 import AutocompleteInput from './AutocompleteInput'
-import homeStyles from './Home.sass'
+import EditorWrapper from './EditorWrapper'
 import { pluralize, mapObjectToPairs, FILENAMES_SEPARATOR, groupFieldsData } from '../utils/helpers'
 
 const INITIAL_STATE = {
@@ -48,7 +48,7 @@ class FieldEditor extends React.Component {
 const FieldsEditorWrapper = ({fieldsObject, ...props}) => {
   const fields = mapObjectToPairs(fieldsObject)
   return (
-    <div className='mb-5 p-0 pt-card'>
+    <div className='mb-10 p-0 pt-card pt-card pt-card--dark'>
       <div style={{padding: '6px 12px'}}>{props.names}</div>
       <table className='w--100 pt-table pt-bordered pt-condensed'>
         <tbody>
@@ -69,23 +69,22 @@ export default class CustomFieldsEditor extends React.Component {
   }
   isValid = (): boolean => this.state.fieldName.length > 0
   getObject = () => ({[this.state.fieldName]: this.state.fieldValue})
-  submitNewField = (e): void => {
+  submitNewField = (e: any): void => {
     e && e.preventDefault()
     if (this.isValid()) {
       this.updateFields(this.getObject())
       this.setState(INITIAL_STATE)
     }
   }
-  updateFields = (field, names) => {
+  updateFields = (field: any, names?: string) => {
     this.props.submitHandler({fields: fields => merge(fields, field)}, names && names.split(FILENAMES_SEPARATOR))
   }
-  handleRemoveField = (key, names) => {
+  handleRemoveField = (key: string, names: string) => {
     this.props.submitHandler({fields: omit([key])}, names && names.split(FILENAMES_SEPARATOR))
   }
   render () {
     return (
-      <div className={homeStyles.editorSection}>
-        <h5 className='mtb-15'>Custom Fields:</h5>
+      <EditorWrapper title='Custom Fields:'>
         <div>{groupFieldsData(this.props.files).map((data, i) => (
           <FieldsEditorWrapper
             key={i}
@@ -95,7 +94,7 @@ export default class CustomFieldsEditor extends React.Component {
             removeHandler={this.handleRemoveField}
           />
         ))}</div>
-        <div>
+        <div className='to-front'>
           <div className='flex mt-10'>
             <AutocompleteInput
               onSelect={this.updateName}
@@ -120,7 +119,7 @@ export default class CustomFieldsEditor extends React.Component {
             </form>
           </div>
         </div>
-      </div>
+      </EditorWrapper>
     )
   }
 }
