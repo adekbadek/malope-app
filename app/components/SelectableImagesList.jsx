@@ -31,15 +31,11 @@ class SelectableImagesList extends React.PureComponent {
     }, 'keydown')
     this.combokeys && this.combokeys.bind(['down', 'right'], (e) => {
       e.preventDefault()
-      this.props.handleSelection(
-        shiftSelectedIds(this.props.selectedImagesIds, this.props.images, true)
-      )
+      this.shiftSelection(true)
     }, 'keydown')
     this.combokeys && this.combokeys.bind(['up', 'left'], (e) => {
       e.preventDefault()
-      this.props.handleSelection(
-        shiftSelectedIds(this.props.selectedImagesIds, this.props.images, false)
-      )
+      this.shiftSelection(false)
     }, 'keydown')
   }
   componentWillUnmount () {
@@ -53,6 +49,12 @@ class SelectableImagesList extends React.PureComponent {
 
   handlePreview = (image) => this.setState({previewedImage: image})
   handlePreviewClose = () => this.setState({previewedImage: null})
+  shiftSelection = (forward: boolean) => {
+    this.props.handleSelection(
+      shiftSelectedIds(this.props.selectedImagesIds, this.props.images, forward)
+    )
+    this.state.previewedImage && this.previewLastSelected()
+  }
   previewLastSelected = () => {
     if (this.props.selectedImagesIds.length > 0) {
       this.handlePreview(
