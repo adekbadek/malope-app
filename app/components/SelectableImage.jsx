@@ -10,24 +10,33 @@ const Indicator = ({data, icon}) =>
   (data && !isEmpty(data)) ? <span className={`mr-5 pt-ui-text pt-icon-${icon}`} /> : null
 
 export default (props: any) => {
-  const { selected, selecting, image, showThumb, ...passedProps } = props
+  const { selected, selecting, image, inListLayout, ...passedProps } = props
 
   const rawCustomData = image.metadata[EXIF_TAG_NAME]
   const customData = rawCustomData && jsonParse(rawCustomData)
 
   return (
     <div
-      className={cx('flex--inline pt-card pt-ui-text pt-icon-eye-open', styles.imageTile, {
+      className={cx('pt-card pt-ui-text pt-icon-eye-open', styles.imageTile, {
         [styles.imageTileSelected]: selected,
         [styles.imageTileSelecting]: selecting,
+        'flex--inline': !inListLayout,
       })}
+      style={{
+        width: inListLayout ? '100%' : '160px',
+      }}
       {...passedProps}
     >
-      <div
+      {!inListLayout && <div
         className={styles.imageTileDisplay}
-        style={showThumb ? bgImgStyle(image.path) : {}}
-      />
-      <div className={styles.imageTileInfo}>
+        style={bgImgStyle(image.path)}
+      />}
+      <div
+        className={cx(styles.imageTileInfo, {'flex flex--spread': inListLayout})}
+        style={{
+          maxWidth: inListLayout ? 'none' : '70px',
+        }}
+      >
         <div className={styles.imageTileInfoTitle}>
           {image.name}
         </div>

@@ -13,7 +13,7 @@ import { shiftSelectedIds } from '../utils/helpers'
 
 class SelectableImagesList extends React.PureComponent {
   state = {
-    showThumb: true,
+    listLayout: true,
     previewedImage: null,
     multipleSelect: false,
     alternativeClick: false,
@@ -76,36 +76,37 @@ class SelectableImagesList extends React.PureComponent {
     this.props.handleSelection(selection)
   }
 
-  toggleThumbnail = () => {
-    this.setState(({showThumb}) => ({showThumb: !showThumb}))
-  }
+  toggleLayout = (listLayout) => this.setState(({listLayout}))
 
   render () {
     const disableDeselect = this.props.selectedImagesIds.length === 0
-    const { previewedImage, showThumb } = this.state
+    const { previewedImage, listLayout } = this.state
     return (
-      <div>
+      <div className='pr-20'>
         <div>
           {previewedImage
             ? <Button onClick={this.handlePreviewClose}>Close preview</Button>
-            : <span>
-              {this.props.images.length > 0 && [
-                <Button key='select' onClick={this.selectAll} className='mr-10'>Select all</Button>,
-                <Button key='deselect' disabled={disableDeselect} className='mr-10' onClick={this.deselectAll}>Clear selection</Button>
-              ]}
-              {this.props.images.length > 0 && <Button
-                onClick={this.toggleThumbnail}
-              >{showThumb ? 'Hide' : 'Show'} thumbnails</Button>}
-            </span>}
+            : <div className='flex flex--spread'>
+              <div>
+                {this.props.images.length > 0 && [
+                  <Button key='select' onClick={this.selectAll} className='mr-10'>Select all</Button>,
+                  <Button key='deselect' disabled={disableDeselect} className='mr-10' onClick={this.deselectAll}>Clear selection</Button>
+                ]}
+              </div>
+              {this.props.images.length > 0 && <div className='pt-button-group'>
+                <button disabled={listLayout} onClick={() => this.toggleLayout(true)} className='pt-button pt-icon-list' />
+                <button disabled={!listLayout} onClick={() => this.toggleLayout(false)} className='pt-button pt-icon-grid-view' />
+              </div>}
+            </div>}
         </div>
         {previewedImage
           ? <ImagePreview image={previewedImage} />
           : <div className={cx('mt-20', styles.imageContainer)}>
             {this.props.images.map(image => (
               <SelectableImage
-                showThumb={this.state.showThumb}
                 key={image.id}
                 image={image}
+                inListLayout={listLayout}
                 selected={this.isSelected(image)}
                 selecting={this.state.alternativeClick}
                 onClick={() => {
