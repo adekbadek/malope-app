@@ -11,7 +11,6 @@ import {
   values,
   zip,
   compose,
-  prop,
   merge,
   assoc,
   dissoc,
@@ -159,4 +158,32 @@ export const shiftSelectedIds = (imageIds: Array<string>, images: Array<Image>, 
       return images[index === 0 ? lastOne : index - 1].id
     }
   })
+}
+
+export const handleFiltering = (images: Array<Image>, filters: Array<string>) => {
+  return images
+    .filter(image => (
+      filters.every(filterValue => {
+        const firstChar = filterValue[0]
+        if (
+          filterValue.length === 1 &&
+          (firstChar === '#' ||
+          firstChar === '!')
+        ) {
+          return true
+        }
+        let passed
+        let negate = false
+        if (filterValue.indexOf('!') === 0) {
+          filterValue = filterValue.replace(/^!/, '')
+          negate = true
+        }
+        if (filterValue.indexOf('#') === 0) {
+          passed = image.data.tags.includes(filterValue.replace(/^#/, ''))
+        } else {
+          passed = image.name.indexOf(filterValue) >= 0
+        }
+        return negate ? !passed : passed
+      })
+    ))
 }

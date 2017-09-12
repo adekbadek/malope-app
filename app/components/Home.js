@@ -10,7 +10,8 @@ import {
   prepareFiles,
   readImageMetadata,
   pluralize,
-  assignTableDataToImages
+  assignTableDataToImages,
+  handleFiltering
 } from '../utils/helpers'
 import { saveFileList, retrieveFileList } from '../utils/storage'
 import styles from './Home.sass'
@@ -95,13 +96,13 @@ class Home extends React.PureComponent {
     this.setState({selectedImagesIds})
   }
   getAllTags = (): Array<string> => (
-    this.state.images.reduce((acc, image) => union(image.data.tags, acc), [])
+    this.getFilteredImages().reduce((acc, image) => union(image.data.tags, acc), [])
   )
   getAllCustomFieldsKeys = (): Array<string> => (
-    this.state.images.reduce((acc, image) => union(keys(image.data.fields), acc), [])
+    this.getFilteredImages().reduce((acc, image) => union(keys(image.data.fields), acc), [])
   )
   getImagesForEditing = (): Array<Image> => (
-    this.state.images.filter(v => this.state.selectedImagesIds.includes(v.id))
+    this.getFilteredImages().filter(v => this.state.selectedImagesIds.includes(v.id))
   )
   submitCSVData = (imageNameModifier: string, table: Array<{}>) => {
     assignTableDataToImages(this.state.images, imageNameModifier, table)
@@ -114,23 +115,14 @@ class Home extends React.PureComponent {
     if (this.state.filters.length === 0) {
       return this.state.images
     }
-    return this.state.images
-      .filter(image => (
-        this.state.filters.filter(v => {
-          if (v.indexOf('#') === 0) {
-            return image.data.tags.includes(v.replace(/^#/, ''))
-          } else {
-            return image.name.indexOf(v) >= 0
-          }
-        }).length > 0
-      ))
+    return handleFiltering(this.state.images, this.state.filters)
   }
   closeCSVImporter = () => this.setState({showCSVImporter: false})
   closeTableView = () => this.setState({showTableView: false})
   render () {
-    const selectedItemsLen = this.state.selectedImagesIds.length
-    const hasImages = this.state.images.length > 1
+    const selectedItemsLen = this.getImagesForEditing().length
     const filteredImages = this.getFilteredImages()
+    const hasImages = filteredImages.length > 1
     return (
       <div className={cx('plr-20', this.props.themeName, styles.Main)}>
         <div className={cx('pt-5', styles.container)}>
@@ -182,7 +174,7 @@ class Home extends React.PureComponent {
         />
         <TableView
           isOpen={this.state.showTableView}
-          images={this.state.images.map(v => ({
+          images={filteredImages.map(v => ({
             _FILENAME: v.name,
             _TAGS: v.data.tags.join(', '),
             ...v.data.fields,
