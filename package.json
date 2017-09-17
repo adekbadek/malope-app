@@ -1,8 +1,4 @@
 {
-  "name": "image-tagger",
-  "productName": "ImageTagger",
-  "version": "0.1.0",
-  "description": "ImageTagger",
   "scripts": {
     "build": "concurrently \"npm run build-main\" \"npm run build-renderer\"",
     "build-dll": "cross-env NODE_ENV=development node --trace-warnings -r babel-register ./node_modules/webpack/bin/webpack --config webpack.config.renderer.dev.dll.js --colors",
@@ -31,8 +27,14 @@
   },
   "browserslist": "electron 1.6",
   "build": {
-    "productName": "ImageTagger",
+    "productName": "Image Tagger",
     "appId": "com.adamboro.ImageTagger",
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "http://127.0.0.1:8080/"
+      }
+    ],
     "files": [
       "dist/",
       "node_modules/",
@@ -116,6 +118,7 @@
     "electron": "^1.6.10",
     "electron-builder": "^19.8.0",
     "electron-devtools-installer": "^2.2.0",
+    "electron-log": "^2.2.9",
     "enzyme": "^2.9.1",
     "enzyme-to-json": "^1.5.1",
     "eslint": "^4.2.0",
@@ -171,6 +174,7 @@
     "devtron": "^1.4.0",
     "electron-debug": "^1.2.0",
     "electron-json-storage": "^3.0.7",
+    "electron-updater": "^2.8.9",
     "hasha": "^3.0.0",
     "history": "^4.6.3",
     "lodash.debounce": "^4.0.8",

@@ -1,9 +1,10 @@
 {
   "name": "image-tagger",
-  "productName": "image-tagger",
+  "productName": "Image Tagger",
   "description": "Image Tagger",
   "version": "1.0.0",
   "main": "./main.prod.js",
+  "author": "Adam Borowski <adam@adamboro.com>",
   "scripts": {
     "postinstall": "npm rebuild --runtime=electron --target=1.6.6 --disturl=https://atom.io/download/atom-shell --build-from-source"
   },
