@@ -1,5 +1,6 @@
 // @flow
 import React from 'react'
+import { ipcRenderer } from 'electron'
 import { connect } from 'react-redux'
 import cx from 'classnames'
 import { sort, union, pick, merge, keys } from 'ramda'
@@ -11,18 +12,23 @@ import {
   readImageMetadata,
   pluralize,
   assignTableDataToImages,
-  handleFiltering
+  handleFiltering,
 } from '../utils/helpers'
 import { saveFileList, retrieveFileList } from '../utils/storage'
 import styles from './Home.sass'
 import SelectableImagesList from './SelectableImagesList'
 import DataEditor from './DataEditor'
-import { showWarning, showInfo } from './MainToaster'
+import {
+  showWarning,
+  showInfo,
+  showDownloadedUpdateInfo,
+  downloadProgressInfo,
+} from './MainToaster'
 import CSVImporter from './CSVImporter'
 import TableView from './TableView'
 import SearchField from './SearchField'
 
-import type { Image } from '../utils/types'
+import type { Image, MainMessage } from '../utils/types'
 
 const NoneSelectedPrompt = () =>
   <div>
@@ -47,6 +53,18 @@ class Home extends React.PureComponent {
     filters: [],
   }
   componentDidMount () {
+    ipcRenderer.on('main', (event, {type, payload}: MainMessage) => {
+      if (payload.info) {
+        if (type === 'update-info') {
+          showInfo(payload.info)
+        } else if (type === 'update-downloaded') {
+          showDownloadedUpdateInfo(payload.info)
+        } else if (type === 'update-progress') {
+          downloadProgressInfo(parseInt(payload.info))
+        }
+      }
+    })
+
     retrieveFileList().then(res => {
       res && res.images && this.updateImages(res.images)
     })

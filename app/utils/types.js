@@ -7,3 +7,10 @@ export type Image = {
   data: any,
   metadata?: any
 };
+
+export type MainMessage = {
+  type: string,
+  payload: {
+    info?: string
+  }
+};

@@ -10,8 +10,13 @@
  *
  * @flow
  */
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
+import { autoUpdater } from 'electron-updater'
+import log from 'electron-log'
+
 import MenuBuilder from './menu'
+
+import type { MainMessage } from './utils/types'
 
 let mainWindow = null
 
@@ -43,6 +48,51 @@ const installExtensions = async () => {
 /**
  * Add event listeners...
  */
+autoUpdater.logger = log
+autoUpdater.logger.transports.file.level = 'info'
+log.info('App starting...')
+
+const sendToMainWindow = (msg: MainMessage) => {
+  mainWindow && mainWindow.webContents.send('main', msg)
+}
+export const checkForUpdates = () => {
+  if (process.env.NODE_ENV === 'production') {
+    autoUpdater.checkForUpdates()
+  }
+}
+
+autoUpdater.on('checking-for-update', () => {
+  sendToMainWindow(
+    {type: 'update-info', payload: {info: 'Checking for update...'}}
+  )
+})
+autoUpdater.on('download-progress', ({percent}) => {
+  sendToMainWindow(
+    {type: 'update-progress', payload: {info: percent}}
+  )
+})
+autoUpdater.on('update-downloaded', ({version}) => {
+  sendToMainWindow(
+    {type: 'update-downloaded', payload: {info: version}}
+  )
+})
+autoUpdater.on('error', (ev, err) => {
+  sendToMainWindow(
+    {type: 'update-info', payload: {info: 'Error in auto-updater.'}}
+  )
+})
+autoUpdater.on('update-not-available', ({version}) => {
+  sendToMainWindow(
+    {type: 'update-info', payload: {info: `App is up to date! (v${version})`}}
+  )
+})
+
+// communication with the renderer
+ipcMain.on('sync', (event, msg: MainMessage) => {
+  if (msg.type === 'perform-update') {
+    autoUpdater.quitAndInstall()
+  }
+})
 
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even
@@ -81,4 +131,6 @@ app.on('ready', async () => {
 
   const menuBuilder = new MenuBuilder(mainWindow)
   menuBuilder.buildMenu()
+
+  checkForUpdates()
 })
