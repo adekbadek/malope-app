@@ -1,4 +1,10 @@
 {
+  "name": "image-tagger",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@bitbucket.org/adamboro/image-tagger.git"
+  },
   "scripts": {
     "build": "concurrently \"npm run build-main\" \"npm run build-renderer\"",
     "build-dll": "cross-env NODE_ENV=development node --trace-warnings -r babel-register ./node_modules/webpack/bin/webpack --config webpack.config.renderer.dev.dll.js --colors",
@@ -15,13 +21,16 @@
     "package-all": "npm run build && build -mwl",
     "package-linux": "npm run build && build --linux",
     "package-win": "npm run build && build --win --x64",
+    "release": "npm run prepare-release && git add app/package.json && git commit --amend --no-edit && npm run package && npm run deploy-release",
+    "prepare-release": "corp-semantic-release --changelogpreset angular-bitbucket",
+    "postversion": "node pre-release.js && git add app/package.json",
     "deploy-release": "aws s3 sync ./release s3://image-tagger-release --acl public-read --exclude \"*\" --include \"latest-mac.json\" --include \"latest-mac.yml\" --include \"*.zip\"",
     "postinstall": "concurrently \"npm run flow-typed\" \"npm run build-dll\" \"electron-builder install-app-deps\" \"node node_modules/fbjs-scripts/node/check-dev-engines.js package.json\"",
     "prestart": "npm run build",
     "start": "cross-env NODE_ENV=production electron ./app/",
     "start-main-dev": "cross-env HOT=1 NODE_ENV=development electron -r babel-register ./app/main.dev",
     "start-renderer-dev": "cross-env NODE_ENV=development node --trace-warnings -r babel-register ./node_modules/webpack-dev-server/bin/webpack-dev-server --config webpack.config.renderer.dev.js",
-    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
+    "changelog": "conventional-changelog -p angular-bitbucket -i CHANGELOG.md -s"
   },
   "browserslist": "electron 1.6",
   "build": {
@@ -30,7 +39,7 @@
     "publish": [
       {
         "provider": "generic",
-        "url": "http://127.0.0.1:8080/"
+        "url": "https://s3.eu-central-1.amazonaws.com/image-tagger-release/"
       }
     ],
     "files": [
@@ -110,6 +119,8 @@
     "babili-webpack-plugin": "^0.1.2",
     "chalk": "^2.0.1",
     "concurrently": "^3.5.0",
+    "conventional-changelog-angular-bitbucket": "^1.1.2",
+    "corp-semantic-release": "^6.2.0",
     "cross-env": "^5.0.0",
     "cross-spawn": "^5.1.0",
     "css-loader": "^0.28.3",
