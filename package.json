@@ -153,6 +153,7 @@
     "flow-bin": "^0.48.0",
     "flow-runtime": "^0.13.0",
     "flow-typed": "^2.1.2",
+    "ghooks": "^2.0.0",
     "html-webpack-plugin": "^2.29.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^20.0.4",
@@ -171,6 +172,7 @@
     "stylelint": "^7.12.0",
     "stylelint-config-standard": "^16.0.0",
     "url-loader": "^0.5.8",
+    "validate-commit-msg": "^2.14.0",
     "webpack": "^3.5.6",
     "webpack-bundle-analyzer": "^2.8.2",
     "webpack-dev-server": "^2.5.0",
@@ -210,6 +212,9 @@
     "yarn": ">=0.21.3"
   },
   "config": {
+    "ghooks": {
+      "commit-msg": "validate-commit-msg"
+    },
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
