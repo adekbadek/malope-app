@@ -2,7 +2,7 @@
   "name": "image-tagger",
   "productName": "Image Tagger",
   "description": "Image Tagger",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "main": "./main.prod.js",
   "author": "Adam Boro <adam@adamboro.com> (https://adamboro.com/)",
   "scripts": {
