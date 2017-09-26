@@ -1,12 +1,12 @@
 import base64 from 'base-64'
 import fs from 'fs'
 import blobUtil from 'blob-util'
-import { path } from 'ramda'
+import { path, without, find } from 'ramda'
 
 import { createTableFromObject } from './helpers'
 
 export const ajaxer = (
-  {username, password},
+  {username, password, endpoint},
   url,
   blob = null,
   body = null,
@@ -24,7 +24,7 @@ export const ajaxer = (
     headers.append('Content-Type', `application/json`)
   }
 
-  fetch(url.replace(/([^:])(\/\/+)/g, '$1/'), {
+  fetch(`${endpoint}/${url}`.replace(/([^:])(\/\/+)/g, '$1/'), {
     method,
     headers,
     ...body && {body},
@@ -40,7 +40,7 @@ const addMedia = (creds, {path, name}) => new Promise((resolve, reject) => {
     .then(blob => {
       ajaxer(
         creds,
-        `${creds.endpoint}/media`,
+        '/media',
         blob,
         null,
         name,
@@ -52,16 +52,19 @@ const addMedia = (creds, {path, name}) => new Promise((resolve, reject) => {
     .catch(reject)
 })
 
-const createPostWithFeaturedImage = (creds, image, featuredImageId) => {
+const getTags = (creds) => ajaxer(creds, '/tags')
+
+const createPostWithFeaturedImage = (creds, image, featuredImageId, tagIds) => {
   const data = path(['data', 'fields'], image)
   return ajaxer(
     creds,
-    `${creds.endpoint}/posts`,
+    '/posts',
     null,
     JSON.stringify({
       title: data.Title || data.title || image.name,
       featured_media: featuredImageId,
       content: data ? createTableFromObject(data) : '',
+      tags: tagIds,
       status: 'publish'
     }),
     null,
@@ -69,11 +72,44 @@ const createPostWithFeaturedImage = (creds, image, featuredImageId) => {
   )
 }
 
+const createTag = creds => name => ajaxer(creds, '/tags', null, JSON.stringify({name}), null, 'POST')
+
+const getTagIds = (creds, image) => new Promise((resolve, reject) => {
+  const imageTags = path(['data', 'tags'], image)
+  if (imageTags && imageTags.length > 0) {
+    getTags(creds)
+      .then(tags => {
+        const foundTags = tags.filter(({name, id}) => find(tag => tag === name, imageTags))
+        const notFoundInWP = without(foundTags.map(v => v.name), imageTags)
+
+        const tagIdsToAdd = foundTags.map(v => v.id)
+
+        if (notFoundInWP.length > 0) {
+          Promise.all(notFoundInWP.map(createTag(creds)))
+            .then(res => {
+              const allTagsToAdd = [...tagIdsToAdd, ...res.map(v => v.id)]
+              resolve(allTagsToAdd)
+            })
+            .catch(reject)
+        } else {
+          resolve(tagIdsToAdd)
+        }
+      })
+      .catch(reject)
+  } else {
+    resolve([])
+  }
+})
+
 export const createPostFromImage = (creds, image) => new Promise((resolve, reject) => {
-  addMedia(creds, image)
-    .then(({id}) => {
-      createPostWithFeaturedImage(creds, image, id)
-        .then(resolve)
+  getTagIds(creds, image)
+    .then(tagIds => {
+      addMedia(creds, image)
+        .then(({id}) => {
+          createPostWithFeaturedImage(creds, image, id, tagIds)
+            .then(resolve)
+            .catch(reject)
+        })
         .catch(reject)
     })
     .catch(reject)
