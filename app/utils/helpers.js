@@ -187,3 +187,10 @@ export const handleFiltering = (images: Array<Image>, filters: Array<string>) =>
       })
     ))
 }
+
+export const createTableFromObject = (obj: {}) => {
+  const inside = keys(obj).reduce((str, key) => (
+    `<tr><td>${key}</td><td>${obj[key]}</td></tr>${str}`
+  ), '')
+  return `<table><tbody>${inside}</tbody></table>`
+}

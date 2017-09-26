@@ -25,6 +25,7 @@ import {
   downloadProgressInfo,
 } from './MainToaster'
 import CSVImporter from './CSVImporter'
+import WPModal from './WPModal'
 import TableView from './TableView'
 import SearchField from './SearchField'
 
@@ -49,6 +50,7 @@ class Home extends React.PureComponent {
     images: [],
     showCSVImporter: false,
     showTableView: false,
+    showWPModal: false,
     selectedImagesIds: [],
     filters: [],
   }
@@ -136,6 +138,7 @@ class Home extends React.PureComponent {
     return handleFiltering(this.state.images, this.state.filters)
   }
   closeCSVImporter = () => this.setState({showCSVImporter: false})
+  closeWPModal = () => this.setState({showWPModal: false})
   closeTableView = () => this.setState({showTableView: false})
   render () {
     const selectedItemsLen = this.getImagesForEditing().length
@@ -149,6 +152,7 @@ class Home extends React.PureComponent {
             <div className='mt-10 flex flex--center-h'>
               {hasImages && <Button onClick={() => this.setState({showCSVImporter: true})}>Import CSV</Button>}
               {hasImages && <Button className='ml-10' onClick={() => this.setState({showTableView: true})}>Data Table</Button>}
+              <Button className='ml-10' onClick={() => this.setState({showWPModal: true})}>WordPress 😎</Button>
               <label className='pt-file-upload ml-10'>
                 <input multiple type='file' onChange={this.submitFile} />
                 <span className='pt-file-upload-input'>Choose images</span>
@@ -189,6 +193,11 @@ class Home extends React.PureComponent {
           submit={this.submitCSVData}
           isOpen={this.state.showCSVImporter}
           onClose={this.closeCSVImporter}
+        />
+        <WPModal
+          isOpen={this.state.showWPModal}
+          onClose={this.closeWPModal}
+          images={this.getImagesForEditing()}
         />
         <TableView
           isOpen={this.state.showTableView}
