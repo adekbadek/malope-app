@@ -1,3 +1,13 @@
+<a name="1.2.0"></a>
+# [1.2.0](https://bitbucket.org/projects/adamboro/repos/image-tagger/compare/diff?targetBranch=refs%2Ftags%2Fv1.1.0&sourceBranch=refs%2Ftags%2Fv1.2.0) (2017-09-29)
+
+
+### Features
+
+* **wp-api:** disable upload button while uploading ([a55e44b](https://bitbucket.org/projects/adamboro/repos/image-tagger/commits/a55e44b))
+
+
+
 <a name="1.1.0"></a>
 # [1.1.0](https://bitbucket.org/projects/adamboro/repos/image-tagger/compare/diff?targetBranch=refs%2Ftags%2Fv1.0.0&sourceBranch=refs%2Ftags%2Fv1.1.0) (2017-09-26)
 
