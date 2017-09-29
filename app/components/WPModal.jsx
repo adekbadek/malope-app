@@ -56,6 +56,7 @@ class Auth extends React.Component {
 export default class WPModal extends React.Component {
   state = {
     WPCreds: null,
+    uploading: false,
   }
   componentDidMount () {
     retrieveWPCreds().then(WPCreds => {
@@ -79,6 +80,7 @@ export default class WPModal extends React.Component {
     showInfo('saving WP credentials')
   }
   addAllAsPosts = () => {
+    this.setState({uploading: true})
     let int = 0
     let imgLen = this.props.images.length
     downloadProgressInfo(1)
@@ -89,6 +91,7 @@ export default class WPModal extends React.Component {
           downloadProgressInfo(int / imgLen * 100)
           if (int === imgLen) {
             showInfo(`added ${imgLen} posts`)
+            this.setState({uploading: false})
           }
         })
         .catch(res => {
@@ -123,7 +126,7 @@ export default class WPModal extends React.Component {
               <button
                 className='pt-button pt-intent-success'
                 onClick={this.addAllAsPosts}
-                disabled={imagesLen === 0}
+                disabled={imagesLen === 0 || this.state.uploading}
               >
                 add {imagesLen} images as posts
               </button>
