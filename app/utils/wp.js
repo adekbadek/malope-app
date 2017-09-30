@@ -101,16 +101,14 @@ const getTagIds = (creds, image) => new Promise((resolve, reject) => {
   }
 })
 
-export const createPostFromImage = (creds, image) => new Promise((resolve, reject) => {
-  getTagIds(creds, image)
+export const createPostFromImage = (creds, image) => {
+  let tagIdsCollection
+  return getTagIds(creds, image)
     .then(tagIds => {
-      addMedia(creds, image)
-        .then(({id}) => {
-          createPostWithFeaturedImage(creds, image, id, tagIds)
-            .then(resolve)
-            .catch(reject)
-        })
-        .catch(reject)
+      tagIdsCollection = tagIds
+      return addMedia(creds, image)
     })
-    .catch(reject)
-})
+    .then(({id}) => {
+      return createPostWithFeaturedImage(creds, image, id, tagIdsCollection)
+    })
+}
