@@ -61,8 +61,6 @@ export const jsonParse = (str: string) => {
   }
 }
 
-export const sameValues = (arr: Array<{}>) => arr.every(v => JSON.stringify(v) === JSON.stringify(arr[0]))
-
 export const getRawCustomData = (image: Image): string => (
   (image.metadata && image.metadata[EXIF_TAG_NAME]) || JSON.stringify({})
 )

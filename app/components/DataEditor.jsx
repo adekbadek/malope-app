@@ -1,12 +1,11 @@
 // @flow
 import React from 'react'
-import { Tab2, Tabs2, Button } from '@blueprintjs/core'
+import { Button } from '@blueprintjs/core'
 
 import NamesList from './NamesList'
 import TagsEditor from './TagsEditor'
 import CustomFieldsEditor from './CustomFieldsEditor'
 import {
-  sameValues,
   pluralize,
   updateSingleFile
 } from '../utils/helpers'
@@ -28,18 +27,8 @@ export default class DataEditor extends React.PureComponent {
       .then(() => this.props.updateCallback(filteredFiles, true))
   }
 
-  getRawCustomDataForFiles = () => this.props.files.map(v => v.data)
-  getRawDataForFiles = () => this.props.files.map(v => v.metadata)
-
   removeAllData = () => this.submitCustomData()
 
-  getPanel = (data: Array<{}>) => (
-    sameValues(data)
-      ? <pre className='mb-0'>{JSON.stringify(data[0])}</pre>
-      : <div className='mt-10 pt-callout pt-intent-warning'>
-          Data differs between selected files.
-      </div>
-  )
   render () {
     const {files, itemsLen, ...props} = this.props
     return (
@@ -73,10 +62,12 @@ export default class DataEditor extends React.PureComponent {
                 onClick={() => window.confirm('Are you sure?') && this.removeAllData()}
               >remove all data</Button>
             </div>
-            <Tabs2 className='custom-tabs-panel mt-20 pt-10 pt-card' animate={false}>
-              <Tab2 id='custom' title='Custom Data' panel={this.getPanel(this.getRawCustomDataForFiles())} />
-              <Tab2 id='all' title='All Metadata' panel={this.getPanel(this.getRawDataForFiles())} />
-            </Tabs2>
+            <div className='mt-20'>
+              <details>
+                <summary>Raw metadata:</summary>
+                <pre className='mb-0'>{JSON.stringify(this.props.files.map(v => v.metadata), null, '  ')}</pre>
+              </details>
+            </div>
           </div>
         </div>
       </div>
