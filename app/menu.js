@@ -65,13 +65,9 @@ export default class MenuBuilder {
     const subMenuEdit = {
       label: 'Edit',
       submenu: [
-        { label: 'Undo', accelerator: 'Command+Z', selector: 'undo:' },
-        { label: 'Redo', accelerator: 'Shift+Command+Z', selector: 'redo:' },
-        { type: 'separator' },
         { label: 'Cut', accelerator: 'Command+X', selector: 'cut:' },
         { label: 'Copy', accelerator: 'Command+C', selector: 'copy:' },
         { label: 'Paste', accelerator: 'Command+V', selector: 'paste:' },
-        { label: 'Select All', accelerator: 'Command+A', selector: 'selectAll:' }
       ]
     }
     const subMenuViewDev = {
@@ -86,7 +82,6 @@ export default class MenuBuilder {
       label: 'View',
       submenu: [
         { label: 'Toggle Full Screen', accelerator: 'Ctrl+Command+F', click: () => { this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen()) } },
-        { label: 'Toggle Developer Tools', accelerator: 'Alt+Command+I', click: () => { this.mainWindow.toggleDevTools() } }
       ]
     }
     const subMenuWindow = {
