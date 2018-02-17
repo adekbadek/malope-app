@@ -1,3 +1,4 @@
+// @flow
 import base64 from 'base-64'
 import fs from 'fs'
 import blobUtil from 'blob-util'
@@ -7,11 +8,11 @@ import { createTableFromObject } from './helpers'
 
 export const ajaxer = (
   {username, password, endpoint},
-  url,
+  url: string,
   blob = null,
   body = null,
   imageName = '',
-  method = 'GET'
+  method: string = 'GET',
 ) => new Promise((resolve, reject) => {
   const headers = new Headers()
 
