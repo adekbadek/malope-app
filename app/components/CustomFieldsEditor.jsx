@@ -6,7 +6,7 @@ import { Button } from '@blueprintjs/core'
 import AutocompleteInput from './AutocompleteInput'
 import NamesList from './NamesList'
 import EditorWrapper from './EditorWrapper'
-import { pluralize, mapObjectToPairs, FILENAMES_SEPARATOR, groupFieldsData } from '../utils/helpers'
+import { pluralize, mapObjectToPairs, groupFieldsData } from '../utils/helpers'
 
 const INITIAL_STATE = {
   fieldName: '',
@@ -72,14 +72,14 @@ export default class CustomFieldsEditor extends React.PureComponent {
   }
   isValid = (): boolean => this.state.fieldName.length > 0
   getObject = () => ({[this.state.fieldName]: this.state.fieldValue})
-  submitNewField = (e: any): void => {
+  submitNewField = (e: Event): void => {
     e && e.preventDefault()
     if (this.isValid()) {
       this.updateFields(this.getObject())
       this.setState(INITIAL_STATE)
     }
   }
-  updateFields = (field: any, names?: Array<string>) => {
+  updateFields = (field: {}, names?: Array<string>) => {
     this.props.submitHandler({fields: fields => merge(fields, field)}, names && names)
   }
   handleRemoveField = (key: string, names: Array<string>) => {
