@@ -1,4 +1,7 @@
 // @flow
+
+import type { Image } from '../utils/types'
+
 import hasha from 'hasha'
 import exiftool from 'node-exiftool'
 import {
@@ -19,18 +22,11 @@ import {
 
 import { MOD, IMAGE_NAME_KEY } from '../utils/csv'
 
-import type { Image } from '../utils/types'
+require('hazardous')
+const path = require('path')
+const distExiftool = require('dist-exiftool')
 
-export const mapObjectToPairs = (obj: {}) => {
-  return zip(keys(obj), values(obj)).map(v => ({key: v[0], val: v[1]}))
-}
-
-export const hashString = (str: string) => hasha(str, {algorithm: 'md5'})
-
-export const EXIF_TAG_NAME = 'UserComment'
-
-// NOTE: exiftool must be installed globally for prod to work. dist-exiftool is not working.
-const EXIFToolProcess = new exiftool.ExiftoolProcess('/usr/local/bin/exiftool')
+const EXIFToolProcess = new exiftool.ExiftoolProcess(distExiftool)
 
 export const readImageMetadata = (imagePath: string) => new Promise((resolve, reject) => {
   const onSuccess = result => result.data ? resolve(result.data[0]) : reject(result.error)
@@ -46,10 +42,17 @@ export const readImageMetadata = (imagePath: string) => new Promise((resolve, re
   }
 })
 
+export const EXIF_TAG_NAME = 'UserComment'
 export const writeComment = ({path}: {path: string}, comment: string) => EXIFToolProcess.writeMetadata(path, {
   all: '',
   [EXIF_TAG_NAME]: comment,
 }, ['overwrite_original', 'codedcharacterset=utf8'])
+
+export const mapObjectToPairs = (obj: {}) => {
+  return zip(keys(obj), values(obj)).map(v => ({key: v[0], val: v[1]}))
+}
+
+export const hashString = (str: string) => hasha(str, {algorithm: 'md5'})
 
 export const normalizePath = (path: string) => path.replace(/ /g, '\\ ')
 
