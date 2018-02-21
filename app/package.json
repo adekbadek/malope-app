@@ -10,6 +10,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "dist-exiftool": "^10.53.0",
     "node-exiftool": "^2.2.0"
   }
 }
