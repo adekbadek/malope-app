@@ -21,7 +21,7 @@
     "package-all": "npm run build && build -mwl",
     "package-linux": "npm run build && build --linux",
     "package-win": "npm run build && build --win --x64",
-    "release": "npm run prepare-release && git add app/package.json && git commit --amend --no-edit && npm run package && npm run deploy-release",
+    "release": "npm run prepare-release && git add app/package.json package-lock.json && git commit --amend --no-edit && npm run package && npm run deploy-release",
     "prepare-release": "corp-semantic-release --changelogpreset angular-bitbucket",
     "postversion": "node pre-release.js && git add app/package.json",
     "deploy-release": "aws s3 sync ./release s3://image-tagger-release --acl public-read --exclude \"*\" --include \"latest-mac.json\" --include \"latest-mac.yml\" --include \"*.zip\"",
