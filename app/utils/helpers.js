@@ -23,7 +23,6 @@ import {
 import { MOD, IMAGE_NAME_KEY } from '../utils/csv'
 
 require('hazardous')
-const path = require('path')
 const distExiftool = require('dist-exiftool')
 
 const EXIFToolProcess = new exiftool.ExiftoolProcess(distExiftool)

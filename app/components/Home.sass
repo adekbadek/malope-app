@@ -2,6 +2,7 @@
 
 .Main
   color: $white
+  min-width: 900px
 
 .image
   &Tile
@@ -44,10 +45,12 @@
       background-color: rgba($main, .1) !important
     &Selecting
       &:hover
-        &:before
-          opacity: 1
         &:after
           opacity: .8
+      &InGridLayout
+        &:hover
+          &:before
+            opacity: 1
 
   &Container
     max-height: 80vh

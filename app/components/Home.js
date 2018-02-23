@@ -140,20 +140,17 @@ class Home extends React.PureComponent {
   render () {
     const selectedItemsLen = this.getImagesForEditing().length
     const filteredImages = this.getFilteredImages()
-    const hasImages = filteredImages.length > 1
+    const hasImages = this.state.images.length > 1
     return (
       <div className={cx('plr-20', this.props.themeName, styles.Main)}>
         <div className={cx('pt-5', styles.container)}>
-          <div className='mt-20 flex flex--center-h flex--spread'>
-            <h2 className='mt-10 dib'>Image Tagger</h2>
-            <div className='mt-10 flex flex--center-h'>
-              {hasImages && <Button onClick={() => this.setState({showCSVImporter: true})}>Import CSV</Button>}
-              {hasImages && <Button className='ml-10' onClick={() => this.setState({showTableView: true})}>Data Table</Button>}
-              <label className='pt-file-upload ml-10'>
-                <input multiple type='file' onChange={this.submitFile} />
-                <span className='pt-file-upload-input'>Choose images</span>
-              </label>
-            </div>
+          <div className='mt-30 flex flex--center-h'>
+            {hasImages && <Button onClick={() => this.setState({showCSVImporter: true})}>Import CSV</Button>}
+            {hasImages && <Button className='ml-10' onClick={() => this.setState({showTableView: true})}>Data Table</Button>}
+            <label className='pt-file-upload ml-10'>
+              <input multiple type='file' onChange={this.submitFile} />
+              <span className='pt-file-upload-input'>Choose images</span>
+            </label>
           </div>
           <div className='mt-40 flex'>
             <div className='w--50'>

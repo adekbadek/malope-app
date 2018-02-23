@@ -72,7 +72,7 @@ export default class CustomFieldsEditor extends React.PureComponent {
   }
   isValid = (): boolean => this.state.fieldName.length > 0
   getObject = () => ({[this.state.fieldName]: this.state.fieldValue})
-  submitNewField = (e: Event): void => {
+  submitNewField = (e: any): void => {
     e && e.preventDefault()
     if (this.isValid()) {
       this.updateFields(this.getObject())

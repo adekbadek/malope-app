@@ -17,11 +17,16 @@ export default (props: any) => {
 
   return (
     <div
-      className={cx('pt-card pt-ui-text pt-icon-eye-open', styles.imageTile, {
-        [styles.imageTileSelected]: selected,
-        [styles.imageTileSelecting]: selecting,
-        'flex--inline': !inListLayout,
-      })}
+      className={cx(
+        'pt-card pt-ui-text pt-icon-eye-open',
+        styles.imageTile,
+        {
+          [styles.imageTileSelected]: selected,
+          [styles.imageTileSelecting]: selecting,
+          [styles.imageTileSelectingInGridLayout]: selecting && !inListLayout,
+          'flex--inline': !inListLayout,
+        }
+      )}
       style={{
         width: inListLayout ? '100%' : '160px',
       }}
