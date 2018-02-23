@@ -13,6 +13,7 @@ class TableView extends React.PureComponent {
   render () {
     const { images, themeName, isOpen, onClose } = this.props
     const colNames = keys(head(images))
+    const today = new Date().toLocaleDateString().replace(/\//g, '-')
     return (
       <Dialog
         className={cx(themeName, 'dialog--wide')}
@@ -24,11 +25,12 @@ class TableView extends React.PureComponent {
           <Button
             onClick={() => {
               const CSVString = getCSVString(colNames, images)
-              console.log(CSVString)
-              remote.dialog.showSaveDialog({}, (filePath) => {
-                console.log('chosen:', filePath)
-                filePath && fs.writeFileSync(filePath, CSVString)
-              })
+              remote.dialog.showSaveDialog(
+                {defaultPath: `data-${today}.csv`},
+                (filePath) => {
+                  filePath && fs.writeFileSync(filePath, CSVString)
+                }
+              )
             }}
           >Export as CSV</Button>
           <div style={{overflow: 'scroll'}}>
