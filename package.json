@@ -34,7 +34,7 @@
   },
   "browserslist": "electron 1.6",
   "build": {
-    "productName": "Image Tagger",
+    "productName": "Malope",
     "appId": "com.adamboro.ImageTagger",
     "asarUnpack": [
       "**node_modules/exiftool.*/**"

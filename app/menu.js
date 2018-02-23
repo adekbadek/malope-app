@@ -49,13 +49,13 @@ export default class MenuBuilder {
     const subMenuAbout = {
       label: 'Electron',
       submenu: [
-        { label: 'About Image Tagger', selector: 'orderFrontStandardAboutPanel:' },
+        { label: 'About Malope', selector: 'orderFrontStandardAboutPanel:' },
         { type: 'separator' },
         { label: 'Services', submenu: [] },
         { type: 'separator' },
         { label: 'Check for updates...', click: () => { checkForUpdates() } },
         { type: 'separator' },
-        { label: 'Hide Image Tagger', accelerator: 'Command+H', selector: 'hide:' },
+        { label: 'Hide Malope', accelerator: 'Command+H', selector: 'hide:' },
         { label: 'Hide Others', accelerator: 'Command+Shift+H', selector: 'hideOtherApplications:' },
         { label: 'Show All', selector: 'unhideAllApplications:' },
         { type: 'separator' },
