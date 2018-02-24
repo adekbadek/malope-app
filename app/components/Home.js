@@ -143,7 +143,7 @@ class Home extends React.PureComponent {
     const hasImages = this.state.images.length > 1
     return (
       <div className={cx('plr-20', this.props.themeName, styles.Main)}>
-        <div className={cx('pt-5', styles.container)}>
+        <div className={styles.container}>
           <div className='mt-30 flex flex--center-h'>
             {hasImages && <Button onClick={() => this.setState({showCSVImporter: true})}>Import CSV</Button>}
             {hasImages && <Button className='ml-10' onClick={() => this.setState({showTableView: true})}>Data Table</Button>}

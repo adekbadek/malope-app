@@ -5,21 +5,13 @@ import { Button } from '@blueprintjs/core'
 import NamesList from './NamesList'
 import TagsEditor from './TagsEditor'
 import CustomFieldsEditor from './CustomFieldsEditor'
+import withMaxHeight from './withMaxHeight'
 import {
   pluralize,
   updateSingleFile
 } from '../utils/helpers'
 
-export default class DataEditor extends React.PureComponent {
-  state = {
-    topOffset: 140,
-  }
-  componentDidMount () {
-    const box = this.refs.main.getBoundingClientRect()
-    this.setState({
-      topOffset: box.top,
-    })
-  }
+class DataEditor extends React.PureComponent {
   submitCustomData = (changes?: {}, fileNames: Array<string> = []) => {
     const filteredFiles = this.props.files
       .filter(file => fileNames.length > 0 ? fileNames.includes(file.name) : file)
@@ -30,15 +22,12 @@ export default class DataEditor extends React.PureComponent {
   removeAllData = () => this.submitCustomData()
 
   render () {
-    const {files, itemsLen, ...props} = this.props
+    const {files, itemsLen, getRef, style, ...props} = this.props
     return (
       <div
-        className='mt-20 pb-20'
-        ref='main'
-        style={{
-          overflow: 'scroll',
-          maxHeight: `calc(100vh - ${this.state.topOffset}px)`
-        }}
+        className='ptb-20 scroll'
+        ref={getRef}
+        style={style}
       >
         <div>
           {`Editing ${pluralize('item', itemsLen)}: `}
@@ -74,3 +63,5 @@ export default class DataEditor extends React.PureComponent {
     )
   }
 }
+
+export default withMaxHeight(DataEditor)

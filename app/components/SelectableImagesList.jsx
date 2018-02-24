@@ -1,15 +1,35 @@
 // @flow
 import React from 'react'
 import { connect } from 'react-redux'
-import cx from 'classnames'
 import { find, last, prop, append, without } from 'ramda'
 import Combokeys from 'combokeys'
 import { Button } from '@blueprintjs/core'
 
-import styles from './Home.sass'
 import SelectableImage from './SelectableImage'
 import ImagePreview from './ImagePreview'
 import { shiftSelectedIds } from '../utils/helpers'
+import withMaxHeight from './withMaxHeight'
+
+class ImagesList extends React.PureComponent {
+  render () {
+    const {images, getRef, style, handleClick, isSelected, ...props} = this.props
+    return (
+      <div className='pt-20 scroll' ref={getRef} style={style}>
+        {images.map(image => (
+          <SelectableImage
+            key={image.id}
+            image={image}
+            selected={isSelected(image)}
+            onClick={() => handleClick(image)}
+            {...props}
+          />
+        ))}
+      </div>
+    )
+  }
+}
+
+const ImagesListWithMaxHeight = withMaxHeight(ImagesList)
 
 class SelectableImagesList extends React.PureComponent {
   state = {
@@ -101,24 +121,20 @@ class SelectableImagesList extends React.PureComponent {
         </div>
         {previewedImage
           ? <ImagePreview image={previewedImage} />
-          : <div className={cx('mt-20', styles.imageContainer)}>
-            {this.props.images.map(image => (
-              <SelectableImage
-                key={image.id}
-                image={image}
-                inListLayout={listLayout}
-                selected={this.isSelected(image)}
-                selecting={this.state.alternativeClick}
-                onClick={() => {
-                  if (this.state.alternativeClick) {
-                    this.handlePreview(image)
-                  } else {
-                    this.selectImage(image)
-                  }
-                }}
-              />
-            ))}
-          </div>}
+          : <ImagesListWithMaxHeight
+            images={this.props.images}
+            inListLayout={listLayout}
+            isSelected={this.isSelected}
+            selecting={this.state.alternativeClick}
+            handleClick={(image) => {
+              if (this.state.alternativeClick) {
+                this.handlePreview(image)
+              } else {
+                this.selectImage(image)
+              }
+            }}
+          />
+        }
       </div>
     )
   }
