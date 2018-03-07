@@ -133,8 +133,10 @@ export const pluralize = (str: string, items: Array<any> | number) => {
 
 export const assignTableDataToImages = (images: Array<Image>, imageNameModifier: string, table: Array<{}>) => new Promise((resolve, reject) => {
   let updatedFiles = []
-  const proms = table.map(row => {
-    const imageName = imageNameModifier.replace(MOD, row[IMAGE_NAME_KEY])
+  const promises = table.map(row => {
+    const imageName = imageNameModifier
+      ? imageNameModifier.replace(MOD, row[IMAGE_NAME_KEY])
+      : row[IMAGE_NAME_KEY]
     const foundImage = images.find(v => v.name === imageName)
     if (foundImage) {
       updatedFiles = append(foundImage, updatedFiles)
@@ -143,7 +145,7 @@ export const assignTableDataToImages = (images: Array<Image>, imageNameModifier:
       })(foundImage)
     }
   })
-  Promise.all(proms)
+  Promise.all(promises)
     .then(() => resolve(updatedFiles))
     .catch(reject)
 })
