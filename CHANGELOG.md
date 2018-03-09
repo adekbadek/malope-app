@@ -1,3 +1,22 @@
+<a name="1.4.0"></a>
+# [1.4.0](https://bitbucket.org/projects/adamboro/repos/image-tagger/compare/diff?targetBranch=refs%2Ftags%2Fv1.3.0&sourceBranch=refs%2Ftags%2Fv1.4.0) (2018-03-09)
+
+
+### Bug Fixes
+
+* scrolling issues by setting max heights and blocking global scroll ([fa0e4f2](https://bitbucket.org/projects/adamboro/repos/image-tagger/commits/fa0e4f2))
+* **CSV-import:** handle empty imageNameModifier ([1ce8cb3](https://bitbucket.org/projects/adamboro/repos/image-tagger/commits/1ce8cb3))
+
+
+### Features
+
+* **CSV:** set export file name ([cfe207f](https://bitbucket.org/projects/adamboro/repos/image-tagger/commits/cfe207f))
+* authkey checking ([88ea850](https://bitbucket.org/projects/adamboro/repos/image-tagger/commits/88ea850))
+* change product name to Malope ([23172da](https://bitbucket.org/projects/adamboro/repos/image-tagger/commits/23172da))
+* update app icon ([36e5e71](https://bitbucket.org/projects/adamboro/repos/image-tagger/commits/36e5e71))
+
+
+
 <a name="1.3.0"></a>
 # [1.3.0](https://bitbucket.org/projects/adamboro/repos/image-tagger/compare/diff?targetBranch=refs%2Ftags%2Fv1.2.0&sourceBranch=refs%2Ftags%2Fv1.3.0) (2018-02-21)
 
