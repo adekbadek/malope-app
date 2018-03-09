@@ -1,7 +1,6 @@
 // @flow
 import React from 'react'
 import { ipcRenderer } from 'electron'
-import { connect } from 'react-redux'
 import cx from 'classnames'
 import { sort, union, pick, merge, keys } from 'ramda'
 import { Button } from '@blueprintjs/core'
@@ -44,7 +43,7 @@ const NoFilesPrompt = () =>
     Choose files using the form above 👆
   </div>
 
-class Home extends React.PureComponent {
+export default class Home extends React.PureComponent {
   state = {
     images: [],
     showCSVImporter: false,
@@ -142,7 +141,7 @@ class Home extends React.PureComponent {
     const filteredImages = this.getFilteredImages()
     const hasImages = this.state.images.length > 1
     return (
-      <div className={cx('plr-20', this.props.themeName, styles.Main)}>
+      <div className={cx('plr-20', styles.Main)}>
         <div className={styles.container}>
           <div className='mt-30 flex flex--center-h'>
             {hasImages && <Button onClick={() => this.setState({showCSVImporter: true})}>Import CSV</Button>}
@@ -200,7 +199,3 @@ class Home extends React.PureComponent {
     )
   }
 }
-
-export default connect(state => ({
-  themeName: state.layout.themeName,
-}))(Home)

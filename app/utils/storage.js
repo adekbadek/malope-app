@@ -19,3 +19,7 @@ export const retrieveFileList = retrieveItem(FILES_KEY)
 const WP_KEY = 'wp-auth'
 export const saveWPCreds = saveItem(WP_KEY)
 export const retrieveWPCreds = retrieveItem(WP_KEY)
+
+const AUTHKEY_KEY = 'authkey-key'
+export const saveAuthkey = saveItem(AUTHKEY_KEY)
+export const retrieveAuthkey = retrieveItem(AUTHKEY_KEY)
